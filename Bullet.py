@@ -7,7 +7,10 @@ class Bullet:
     velocity = (5, 5) #placeholder, later we make the direction according to the mouse's aim
     
   def drawUpdate(self, gameDisplay): #moves the bullet according to velocity, then draws it
-    self.x_coord += velocity[0]
-    self.y_coord += velocity[1]
-    pygame.draw.circle(gameDisplay, Color.black, [x_coord, y_coord, 10, 10], 3)
+    if self.x_coord < 800 and self.y_coord < 600: #checks if bullet is off screen
+      self.x_coord += velocity[0]
+      self.y_coord += velocity[1]
+      pygame.draw.circle(gameDisplay, Color.black, [x_coord, y_coord, 10, 10], 3)
+    else:
+      pass
     
