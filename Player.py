@@ -1,3 +1,4 @@
+import pygame
 from Design import Color,Layout
 
 class User:
