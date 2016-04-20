@@ -1,4 +1,5 @@
 import pygame
+import Bullet
 from Design import Color,Layout
 
 class User:
