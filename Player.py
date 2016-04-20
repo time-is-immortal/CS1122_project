@@ -18,6 +18,9 @@ class User:
         self.mouseX = 0
         self.mouseY = 0
         
+        self.health = 5
+        self.ammo = 50
+        
     #change movement
     #yes moving
     #player moves in direction of key
