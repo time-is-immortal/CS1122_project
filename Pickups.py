@@ -7,15 +7,15 @@ class Pickup:
     self.x_coord = x_coord
     self.y_coord = y_coord
 
-class Health_Pickup(Pickup): #call this when player picks this up
+class Health_Pickup(Pickup):
   super().__init__()
   
-  def gotPickedUp(self, player):
+  def gotPickedUp(self, player): #call this when player picks this up
     player.health += 5
     
-class Ammo_Pickup(Pickup): #call this when player picks this up
+class Ammo_Pickup(Pickup):
   super().__init__()
   
-  def gotPickedUp(self, player):
+  def gotPickedUp(self, player): #call this when player picks this up
     player.ammo += 50
   
