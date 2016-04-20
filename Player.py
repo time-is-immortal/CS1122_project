@@ -6,13 +6,13 @@ class User:
     #constructor
     def __init__(self):
         #ammo
-        self.ammo = 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+        self.ammo = 9999999
         #health
         self.health = 3
         #spawn location 
         self.playerX = 300
         self.playerY = 300
-        #dimesions
+        #dimensions
         self.playerWidth = 50
         self.playerHeight = 50
         #movement options, continous, noncontinous, mouse tracking
@@ -73,6 +73,10 @@ class User:
             self.playerY = Layout.screen_height-self.playerHeight/2-Layout.borderOffSet
         elif self.playerY < max(self.playerHeight/2,Layout.topOffSet):
             self.playerY = max(self.playerHeight/2,Layout.topOffSet)
+
+    def shootBullet(self): #pew pew
+        playerBullet = Bullet(self.playerX, self.playerY) #creates the bullet at the player's location
+        self.ammo -= 1
 
     def drawUpdate(self, gameDisplay):
         pygame.draw.rect(gameDisplay, Color.black, [self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
