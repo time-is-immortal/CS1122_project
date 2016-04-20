@@ -1,31 +1,22 @@
-import pygame
-
-#define colors
-white = (255,255,255)
-black = (0,0,0)
-red = (255,0,0)
-green = (0,255,0)
-blue = (0,0,255)
-grayish = (192,192,192)
+from Design import Color,Layout
 
 class User:
 
-    playerX = 300
-    playerY = 300
-    playerWidth = 50
-    playerHeight = 50
-    PlayerXChange = 0
-    PlayerYChange = 0
-    pDown = False
-    pUp = False
-    pLeft = False
-    pRight = False
-    mouseX = 0
-    mouseY = 0
-
     #constructor
-    #idk what to write
-    
+    def __init__(self):
+        self.playerX = 300
+        self.playerY = 300
+        self.playerWidth = 50
+        self.playerHeight = 50
+        self.PlayerXChange = 0
+        self.PlayerYChange = 0
+        self.pDown = False
+        self.pUp = False
+        self.pLeft = False
+        self.pRight = False
+        self.mouseX = 0
+        self.mouseY = 0
+        
     #change movement
     #yes moving
     #player moves in direction of key
@@ -65,7 +56,15 @@ class User:
         else:
             self.PlayerYChange = 0   
         self.playerX += self.PlayerXChange
+        if self.playerX > Layout.screen_width-self.playerWidth/2-Layout.borderOffset:
+            self.playerX = Layout.screen_width-self.playerWidth/2-Layout.borderOffset
+        elif self.playerX < self.playerWidth/2+Layout.borderOffset:
+            self.playerX = self.playerWidth/2+Layout.borderOffset
         self.playerY += self.PlayerYChange
+        if self.playerY > Layout.screen_height-self.playerHeight/2-Layout.borderOffset:
+            self.playerY = Layout.screen_height-self.playerHeight/2-Layout.borderOffset
+        elif self.playerY < self.playerHeight/2+Layout.borderOffset:
+            self.playerY = self.playerHeight/2+Layout.borderOffset
 
     def drawUpdate(self, gameDisplay):
-        pygame.draw.rect(gameDisplay, black, [self.playerX,self.playerY,self.playerWidth,self.playerHeight])
+        pygame.draw.rect(gameDisplay, Color.black, [self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])

@@ -1,21 +1,14 @@
 import pygame
 from Player import User
+from Design import Color,Layout
 
 #will initialize all modules
 #have to have it
 pygame.init()
 
-#define colors
-white = (255,255,255)
-black = (0,0,0)
-red = (255,0,0)
-green = (0,255,0)
-blue = (0,0,255)
-grayish = (192,192,192)
-
 #need to make a canvas
 #requires a tuple (aka the size of windows)
-gameDisplay = pygame.display.set_mode((800,600))
+gameDisplay = pygame.display.set_mode((Layout.screen_width,Layout.screen_height))
 pygame.display.set_caption('BestNameEver!')
 
 gameExit = False
@@ -23,9 +16,9 @@ gameExit = False
 #time for frames per sec
 clock = pygame.time.Clock()
 framesPerSec = 60
+
 #player
 player = User()
-
 
 mouseX = 0
 mouseY = 0
@@ -69,7 +62,7 @@ while not gameExit:
 
     #make the color of the screen
     #will always be first
-    gameDisplay.fill(white)
+    gameDisplay.fill(Color.white)
     #update the player
     player.update()
     player.drawUpdate(gameDisplay)
