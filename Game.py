@@ -1,6 +1,7 @@
 import pygame
 from Player import User
 from Design import Color,Layout
+from Monster import AMonster
 
 #will initialize all modules
 #have to have it
@@ -19,6 +20,9 @@ framesPerSec = 60
 
 #player
 player = User()
+
+#monster
+monster = AMonster()
 
 mouseX = 0
 mouseY = 0
@@ -66,6 +70,9 @@ while not gameExit:
     #update the player
     player.update()
     player.drawUpdate(gameDisplay)
+	
+    monster.update()
+    monster.drawUpdate(gameDisplay)
     #another way to draw rectangle
     #gameDisplay.fill(red, rect=[200,200,50,50])
     

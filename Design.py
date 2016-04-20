@@ -12,4 +12,5 @@ class Color:
 class Layout:
     screen_width = 800
     screen_height = 600
-    borderOffset = 5
+    borderOffSet = 5
+    topOffSet = 50
