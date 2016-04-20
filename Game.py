@@ -50,7 +50,7 @@ while not gameExit:
             if event.key == pygame.K_DOWN:
                 player.downTrue()
             if event.key == pygame.K_SPACE:
-                player.shootBullet()
+                player.shootBullet()    
         if event.type == pygame.KEYUP:
             #player should stop moving
             #in said direction
