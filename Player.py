@@ -4,7 +4,6 @@ import math
 from Design import Color,Layout
 
 class User:
-
     #constructor
     def __init__(self):
         #ammo
@@ -29,6 +28,7 @@ class User:
         self.mouseY = 0
         
         self.bulletList = [] #list of bullets on screen, will iterate through to update their positions
+        self.image = UserImage()
         
     #change movement
     #yes moving
@@ -92,7 +92,8 @@ class User:
 
     def drawUpdate(self, gameDisplay):
         #player display
-        pygame.draw.rect(gameDisplay,Color.black,[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
+        #pygame.draw.rect(gameDisplay,Color.black,[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
+        self.image.drawUpdate(gameDisplay, self.playerX, self.playerY)
         #health bar
         pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currentHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])
         
@@ -102,3 +103,13 @@ class User:
             else:
                 bullet.drawUpdate(gameDisplay)
             
+class UserImage(pygame.sprite.Sprite):
+    def __init__(self): 
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load("player.png").convert()  #gets image
+        self.rect = self.image.get_rect()                       #gets rect so we can update the image's position
+        
+    def drawUpdate(self, gameDisplay, x_coord, y_coord):
+        self.rect.x = x_coord
+        self.rect.y = y_coord
+    
