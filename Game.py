@@ -1,6 +1,6 @@
 import pygame
 from Player import User
-from Design import Color,Layout
+from Design import *
 from Monster import AMonster
 
 #will initialize all modules

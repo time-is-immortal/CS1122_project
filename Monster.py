@@ -1,6 +1,6 @@
 import pygame
 import random
-from Design import Color,Layout
+from Design import *
 
 class AMonster:
 
@@ -24,6 +24,9 @@ class AMonster:
         #possible movements
         self.movements = ['up','down','left','right']
         self.values = {'up':(0,-monsterMove),'down':(0,monsterMove),'left':(-monsterMove,0),'right':(monsterMove,0)}
+        
+        #represents the image
+        self.imageSurface = pygame.transform.scale(pygame.image.load(GameImages.monsterImage).convert_alpha(),(self.monsterWidth,self.monsterHeight))
         
     #update monster position
     def update(self):
@@ -51,11 +54,9 @@ class AMonster:
         
     def drawUpdate(self, gameDisplay):
         #monster display
-        pygame.draw.rect(
-            gameDisplay,
-            Color.red if self.currentHealth > 1 else Color.darkred if self.currentHealth > 0 else Color.grayish,
-            [self.monsterX - self.monsterWidth/2,self.monsterY - self.monsterHeight/2,self.monsterWidth,self.monsterHeight]
-        )
+        gameDisplay.blit(self.imageSurface,[self.monsterX - self.monsterWidth/2,self.monsterY - self.monsterHeight/2,self.monsterWidth,self.monsterHeight])
+        #health bar
+        #pygame.draw.rect(gameDisplay,Color.red if self.currentHealth > 1 else Color.darkred if self.currentHealth > 0 else Color.grayish,[self.monsterX - self.monsterWidth/2,self.monsterY - self.monsterHeight/2,self.monsterWidth,self.monsterY -1- self.monsterHeight/2])
         
     def gotHitByBullet(self):
         self.currentHealth -= 1

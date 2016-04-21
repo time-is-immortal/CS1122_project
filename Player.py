@@ -1,9 +1,10 @@
 import pygame
 from Bullet import Bullet
 import math
-from Design import Color,Layout
+from Design import *
 
 class User:
+
     #constructor
     def __init__(self):
         #ammo
@@ -28,7 +29,9 @@ class User:
         self.mouseY = 0
         
         self.bulletList = [] #list of bullets on screen, will iterate through to update their positions
-        self.image = UserImage()
+        
+        #represents the image
+        self.imageSurface = pygame.transform.scale(pygame.image.load(GameImages.playerImage).convert_alpha(),(self.playerWidth,self.playerHeight))
         
     #change movement
     #yes moving
@@ -52,7 +55,7 @@ class User:
     def downFalse(self):
         self.pDown = False
 
-    
+
     #update
     #update player position
     def update(self):
@@ -67,7 +70,8 @@ class User:
         elif self.pDown is True:
             self.PlayerYChange = 5
         else:
-            self.PlayerYChange = 0   
+            self.PlayerYChange = 0 
+        #CHECKS THE BORDER BOUNDARIES  
         self.playerX += self.PlayerXChange
         if self.playerX > Layout.screen_width-self.playerWidth/2-Layout.borderOffSet:
             self.playerX = Layout.screen_width-self.playerWidth/2-Layout.borderOffSet
@@ -92,8 +96,7 @@ class User:
 
     def drawUpdate(self, gameDisplay):
         #player display
-        #pygame.draw.rect(gameDisplay,Color.black,[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
-        self.image.drawUpdate(gameDisplay, self.playerX, self.playerY)
+        gameDisplay.blit(self.imageSurface,[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
         #health bar
         pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currentHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])
         
@@ -103,13 +106,3 @@ class User:
             else:
                 bullet.drawUpdate(gameDisplay)
             
-class UserImage(pygame.sprite.Sprite):
-    def __init__(self): 
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load("player.png").convert()  #gets image
-        self.rect = self.image.get_rect()                       #gets rect so we can update the image's position
-        
-    def drawUpdate(self, gameDisplay, x_coord, y_coord):
-        self.rect.x = x_coord
-        self.rect.y = y_coord
-    

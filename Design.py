@@ -16,3 +16,8 @@ class Layout:
     borderOffSet = 5
     topOffSet = 25
     healthBarWidth = 500
+
+#define game images
+class GameImages:
+    playerImage = "static/player.png"
+    monsterImage = "static/virus.png"

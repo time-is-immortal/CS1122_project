@@ -1,5 +1,5 @@
 import pygame
-from Design import Color, Layout
+from Design import *
 import math
 import random
 
