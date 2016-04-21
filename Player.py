@@ -78,8 +78,9 @@ class User:
             self.playerY = max(self.playerHeight/2,Layout.topOffSet)
 
     def shootBullet(self): #pew pew
-        offset = (self.mouseX-self.playerX, mouseY-self.playerY) #should calculate angle between player and mouse, unsure if this works
-        angle = 135-math.degrees(math.atan2(*offset))
+        # offset = (self.mouseX-self.playerX, mouseY-self.playerY) #should calculate angle between player and mouse, unsure if this works
+        # angle = 135-math.degrees(math.atan2(*offset))
+        angle = 0 #placehlder
         playerBullet = Bullet(self.playerX, self.playerY, angle)
         self.ammo -= 1
 
