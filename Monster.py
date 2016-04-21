@@ -7,7 +7,7 @@ class AMonster:
     #constructor
     def __init__(self):
         #health
-        self.currenHealth = 2
+        self.currentHealth = 2
         self.maxHealth = 2
         #random spawn location
         #does not test if spwaning on player*************
@@ -27,6 +27,9 @@ class AMonster:
         
     #update monster position
     def update(self):
+        if self.currentHealth <= 0:
+            # The monster is dead.
+            return
         if self.delay == 10:
             #random movement
             pair = self.values[self.movements[random.randint(0,len(self.movements)-1)]]
@@ -48,4 +51,25 @@ class AMonster:
         
     def drawUpdate(self, gameDisplay):
         #monster display
-        pygame.draw.rect(gameDisplay,Color.red,[self.monsterX - self.monsterWidth/2,self.monsterY - self.monsterHeight/2,self.monsterWidth,self.monsterHeight])	
+        pygame.draw.rect(
+            gameDisplay,
+            Color.red if self.currentHealth > 1 else Color.darkred if self.currentHealth > 0 else Color.grayish,
+            [self.monsterX - self.monsterWidth/2,self.monsterY - self.monsterHeight/2,self.monsterWidth,self.monsterHeight]
+        )
+        
+    def gotHitByBullet(self):
+        self.currentHealth -= 1
+        
+    def checkBulletHit(self, bullet):
+        # Checks whether this monster was hit by a bullet
+        if abs(bullet.x_coord - self.monsterX) <= self.monsterWidth / 2 and abs(bullet.y_coord - self.monsterY) <= self.monsterHeight / 2:
+            # The bullet hit the monster!
+            self.gotHitByBullet()
+            bullet.remove()
+            return True
+        return False
+            
+    def checkBulletHitList(self, bulletList):
+        for bullet in bulletList:
+            if self.checkBulletHit(bullet):
+                break

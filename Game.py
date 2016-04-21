@@ -73,6 +73,7 @@ while not gameExit:
     player.update()
     player.drawUpdate(gameDisplay)
 	
+    monster.checkBulletHitList(player.bulletList)
     monster.update()
     monster.drawUpdate(gameDisplay)
     #another way to draw rectangle

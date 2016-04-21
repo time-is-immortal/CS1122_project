@@ -10,7 +10,7 @@ class User:
         #ammo
         self.ammo = 9999999
         #health
-        self.currenHealth = 10
+        self.currentHealth = 10
         self.maxHealth = 10
         #spawn location 
         self.playerX = 300
@@ -94,9 +94,11 @@ class User:
         #player display
         pygame.draw.rect(gameDisplay,Color.black,[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
         #health bar
-        pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currenHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])
-       
-        for bullet in self.bulletList: #update every bullet on screen
-            if not bullet.isOffScreen: 
+        pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currentHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])
+        
+        for index, bullet in enumerate(self.bulletList): #update every bullet on screen
+            if bullet.isOffScreen:
+                del self.bulletList[index]
+            else:
                 bullet.drawUpdate(gameDisplay)
             

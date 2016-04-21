@@ -21,3 +21,5 @@ class Bullet:
     else:
       self.isOffScreen = True #this is here so player knows it can be deleted from the player's bulletList
     
+  def remove(self):
+    self.isOffScreen = True # We may have a more elegant way of doing this later.
