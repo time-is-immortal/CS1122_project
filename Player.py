@@ -94,5 +94,6 @@ class User:
         pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currenHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])
        
         for bullet in self.bulletList: #update every bullet on screen
-            bullet.drawUpdate(gameDisplay)
+            if not bullet.isOffScreen: 
+                bullet.drawUpdate(gameDisplay)
             
