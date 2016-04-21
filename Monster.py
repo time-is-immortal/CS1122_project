@@ -29,7 +29,8 @@ class AMonster:
     def update(self):
         if self.delay == 10:
             #random movement
-            pair = self.values[self.movements[random.randint(0,len(self.movements)-1)]]		
+            pair = self.values[self.movements[random.randint(0,len(self.movements)-1)]]
+            #CHECKS THE BORDER BOUNDARIES 
             self.monsterX += pair[0]
             if self.monsterX > Layout.screen_width-self.monsterWidth/2-Layout.borderOffSet:
                 self.monsterX = Layout.screen_width-self.monsterWidth/2-Layout.borderOffSet
@@ -41,9 +42,10 @@ class AMonster:
             elif self.monsterY < self.monsterHeight/2+Layout.topOffSet:
                 self.monsterY = self.monsterHeight/2+Layout.topOffSet
         self.delay += 1
-        #reset delay
+        #resets delay
         if self.delay > self.delayTimer:
            self.delay = 0 
         
     def drawUpdate(self, gameDisplay):
+        #monster display
         pygame.draw.rect(gameDisplay,Color.red,[self.monsterX - self.monsterWidth/2,self.monsterY - self.monsterHeight/2,self.monsterWidth,self.monsterHeight])	

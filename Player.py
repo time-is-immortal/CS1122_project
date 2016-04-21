@@ -65,7 +65,8 @@ class User:
         elif self.pDown is True:
             self.PlayerYChange = 5
         else:
-            self.PlayerYChange = 0   
+            self.PlayerYChange = 0
+        #CHECKS THE BORDER BOUNDARIES    
         self.playerX += self.PlayerXChange
         if self.playerX > Layout.screen_width-self.playerWidth/2-Layout.borderOffSet:
             self.playerX = Layout.screen_width-self.playerWidth/2-Layout.borderOffSet
@@ -74,8 +75,8 @@ class User:
         self.playerY += self.PlayerYChange
         if self.playerY > Layout.screen_height-self.playerHeight/2-Layout.borderOffSet:
             self.playerY = Layout.screen_height-self.playerHeight/2-Layout.borderOffSet
-        elif self.playerY < max(self.playerHeight/2,Layout.topOffSet):
-            self.playerY = max(self.playerHeight/2,Layout.topOffSet)
+        elif self.playerY < self.playerHeight/2+Layout.topOffSet:
+            self.playerY = self.playerHeight/2+Layout.topOffSet
 
     def shootBullet(self): #pew pew
         # offset = (self.mouseX-self.playerX, mouseY-self.playerY) #should calculate angle between player and mouse, unsure if this works
@@ -85,5 +86,7 @@ class User:
         self.ammo -= 1
 
     def drawUpdate(self, gameDisplay):
+        #player display
         pygame.draw.rect(gameDisplay,Color.black,[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
-        pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currenHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])
+        #health bar
+        pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currentHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])
