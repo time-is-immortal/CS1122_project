@@ -1,11 +1,8 @@
 import pygame
-import Design
+from Design import Color, Layout
 import math
 import random
 
-green = (0,255,0)
-screen_x = Design.screen_width
-screen_y = Design.screen_height
 
 class Bullet:
   def __init__(self, x_coord, y_coord, angle): #x and y coords should just be player's coords, since it is shot out of the player
@@ -17,10 +14,10 @@ class Bullet:
     self.isOffScreen = False
     
   def drawUpdate(self, gameDisplay): #moves the bullet according to velocity, then draws it
-    if self.x_coord < screen_x and self.y_coord < screen_y: #checks if bullet is off screen
+    if self.x_coord < Layout.screen_width and self.y_coord < Layout.screen_height: #checks if bullet is off screen
       self.x_coord += self.speed[0]
       self.y_coord += self.speed[1]
-      pygame.draw.circle(gameDisplay, green, [int(round(self.x_coord)), int(round(self.y_coord))], 5, 3)
+      pygame.draw.circle(gameDisplay, Color.green, [int(round(self.x_coord)), int(round(self.y_coord))], 5, 3)
     else:
       self.isOffScreen = True #this is here so player knows it can be deleted from the player's bulletList
     
