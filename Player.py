@@ -78,11 +78,14 @@ class User:
             self.playerY = Layout.screen_height-self.playerHeight/2-Layout.borderOffSet
         elif self.playerY < self.playerHeight/2+Layout.topOffSet:
             self.playerY = self.playerHeight/2+Layout.topOffSet
+        pos = pygame.mouse.get_pos()
+        self.mouseX = pos[0]
+        self.mouseY = pos[1]
 
     def shootBullet(self): #pew pew
-        # offset = (self.mouseX-self.playerX, mouseY-self.playerY) #should calculate angle between player and mouse, unsure if this works
-        # angle = 135-math.degrees(math.atan2(*offset))
-        angle = 0 #placehlder
+        offset = (self.mouseY-self.playerY, self.mouseX-self.playerX) #should calculate angle between player and mouse, unsure if this works
+        angle = 135-math.degrees(math.atan2(*offset))
+        # angle = 0 #placehlder
         playerBullet = Bullet(self.playerX, self.playerY, angle)
         self.bulletList.append(playerBullet)
         self.ammo -= 1
