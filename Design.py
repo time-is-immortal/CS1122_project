@@ -13,4 +13,5 @@ class Layout:
     screen_width = 800
     screen_height = 600
     borderOffSet = 5
-    topOffSet = 50
+    topOffSet = 25
+    healthBarWidth = 500

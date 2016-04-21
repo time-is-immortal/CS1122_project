@@ -10,7 +10,8 @@ class User:
         #ammo
         self.ammo = 9999999
         #health
-        self.health = 3
+        self.currenHealth = 10
+        self.maxHealth = 10
         #spawn location 
         self.playerX = 300
         self.playerY = 300
@@ -83,5 +84,5 @@ class User:
         self.ammo -= 1
 
     def drawUpdate(self, gameDisplay):
-        pygame.draw.rect(gameDisplay, Color.black, [self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
-        
+        pygame.draw.rect(gameDisplay,Color.black,[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
+        pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currenHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])

@@ -7,7 +7,8 @@ class AMonster:
     #constructor
     def __init__(self):
         #health
-        self.health = 1
+        self.currenHealth = 2
+        self.maxHealth = 2
         #random spawn location
         #does not test if spwaning on player*************
         self.monsterX = random.randint(Layout.borderOffSet,Layout.screen_width-Layout.borderOffSet)
@@ -37,8 +38,8 @@ class AMonster:
             self.monsterY += pair[1]
             if self.monsterY > Layout.screen_height-self.monsterHeight/2-Layout.borderOffSet:
                 self.monsterY = Layout.screen_height-self.monsterHeight/2-Layout.borderOffSet
-            elif self.monsterY < max(self.monsterHeight/2,Layout.topOffSet):
-                self.monsterY = max(self.monsterHeight/2,Layout.topOffSet)
+            elif self.monsterY < self.monsterHeight/2+Layout.topOffSet:
+                self.monsterY = self.monsterHeight/2+Layout.topOffSet
         self.delay += 1
         #reset delay
         if self.delay > self.delayTimer:
