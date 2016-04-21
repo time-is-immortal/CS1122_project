@@ -28,6 +28,8 @@ class User:
         self.mouseX = 0
         self.mouseY = 0
         
+        self.bulletList = [] #list of bullets on screen, will iterate through to update their positions
+        
     #change movement
     #yes moving
     #player moves in direction of key
@@ -65,8 +67,7 @@ class User:
         elif self.pDown is True:
             self.PlayerYChange = 5
         else:
-            self.PlayerYChange = 0
-        #CHECKS THE BORDER BOUNDARIES    
+            self.PlayerYChange = 0   
         self.playerX += self.PlayerXChange
         if self.playerX > Layout.screen_width-self.playerWidth/2-Layout.borderOffSet:
             self.playerX = Layout.screen_width-self.playerWidth/2-Layout.borderOffSet
@@ -75,18 +76,21 @@ class User:
         self.playerY += self.PlayerYChange
         if self.playerY > Layout.screen_height-self.playerHeight/2-Layout.borderOffSet:
             self.playerY = Layout.screen_height-self.playerHeight/2-Layout.borderOffSet
-        elif self.playerY < self.playerHeight/2+Layout.topOffSet:
-            self.playerY = self.playerHeight/2+Layout.topOffSet
+        elif self.playerY < max(self.playerHeight/2,Layout.topOffSet):
+            self.playerY = max(self.playerHeight/2,Layout.topOffSet)
 
     def shootBullet(self): #pew pew
         # offset = (self.mouseX-self.playerX, mouseY-self.playerY) #should calculate angle between player and mouse, unsure if this works
         # angle = 135-math.degrees(math.atan2(*offset))
         angle = 0 #placehlder
         playerBullet = Bullet(self.playerX, self.playerY, angle)
+        self.bulletList.append(playerBullet)
         self.ammo -= 1
 
     def drawUpdate(self, gameDisplay):
-        #player display
         pygame.draw.rect(gameDisplay,Color.black,[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
-        #health bar
-        pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currentHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])
+        pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currenHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])
+       
+        for bullet in self.bulletList: #update every bullet on screen
+            bullet.drawUpdate()
+            
