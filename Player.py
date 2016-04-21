@@ -1,5 +1,5 @@
 import pygame
-import Bullet
+from Bullet import Bullet
 import math
 from Design import Color,Layout
 
@@ -94,5 +94,5 @@ class User:
         pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currenHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])
        
         for bullet in self.bulletList: #update every bullet on screen
-            bullet.drawUpdate()
+            bullet.drawUpdate(gameDisplay)
             
