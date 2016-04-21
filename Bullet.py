@@ -12,7 +12,7 @@ class Bullet:
     if self.x_coord < 800 and self.y_coord < 600: #checks if bullet is off screen
       self.x_coord += self.speed[0]
       self.y_coord += self.speed[1]
-      pygame.draw.circle(gameDisplay, Color.black, [x_coord, y_coord, 10, 10], 3)
+      pygame.draw.circle(gameDisplay, (0,255,0), [x_coord, y_coord, 10, 10], 3)
     else:
       self.kill()
     
