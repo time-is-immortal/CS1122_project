@@ -1,5 +1,6 @@
 import pygame
 import math
+import random
 
 class Bullet:
   def __init__(self, x_coord, y_coord, angle): #x and y coords should just be player's coords, since it is shot out of the player
@@ -13,7 +14,7 @@ class Bullet:
     if self.x_coord < 800 and self.y_coord < 600: #checks if bullet is off screen
       self.x_coord += self.speed[0]
       self.y_coord += self.speed[1]
-      pygame.draw.circle(gameDisplay, (0,255,0), [x_coord, y_coord, 10, 10], 3)
+      pygame.draw.circle(gameDisplay, (0,255,0), [self.x_coord, self.y_coord], 5], 3)
     else:
-      self.kill()
+      pass
     
