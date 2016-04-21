@@ -1,10 +1,11 @@
 import pygame
+import Design
 import math
 import random
 
 green = (0,255,0)
-screen_x 800
-screen_y = 600
+screen_x = Design.screen_width
+screen_y = Design.screen_height
 
 class Bullet:
   def __init__(self, x_coord, y_coord, angle): #x and y coords should just be player's coords, since it is shot out of the player
