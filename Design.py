@@ -15,7 +15,7 @@ class Layout:
     screen_height = 600
     borderOffSet = 5
     topOffSet = 25
-    healthBarWidth = 800
+    healthBarWidth = 700
     ammoTextPadding = 10
 
 #define game images

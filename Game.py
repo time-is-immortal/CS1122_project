@@ -29,7 +29,8 @@ monsterList = []
 
 #insert monsters
 for i in range(level):
-    monsterList.append(AMonster())
+   tempMonster = AMonster(monsterList)
+   monsterList.append(tempMonster)
 
 mouseX = 0
 mouseY = 0

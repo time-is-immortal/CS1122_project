@@ -5,9 +5,9 @@ from Design import *
 class AMonster:
 
     #constructor
-    def __init__(self):
+    def __init__(self,monsterList):
         #health
-        self.currentHealth = 2
+        self.currentHealth = 3
         self.maxHealth = 3
         #dimensions
         self.monsterWidth = 50
@@ -19,11 +19,17 @@ class AMonster:
         self.monsterMoveRate = 20
         #possible movement rates
         self.movements = [(0,-self.monsterMoveRate),(0,self.monsterMoveRate),(-self.monsterMoveRate,0),(self.monsterMoveRate,0)]
-        #random spawn location
-        #does not test if spawning on player*************
-        self.monsterX = random.randint(Layout.borderOffSet,Layout.screen_width-Layout.borderOffSet)
-        self.monsterY = random.randint(self.monsterHeight/2+Layout.topOffSet,Layout.screen_height-Layout.borderOffSet)
         
+        #random spawn location
+        self.monsterX = random.randint(self.monsterWidth/2+Layout.borderOffSet,Layout.screen_width-Layout.borderOffSet-self.monsterWidth/2)
+        self.monsterY = random.randint(self.monsterHeight/2+Layout.topOffSet,Layout.screen_height-Layout.borderOffSet-self.monsterHeight/2)
+        i = 0
+        while i < len(monsterList):
+            if monsterList[i].checkMonsterRect(self.monsterX,self.monsterY):
+                i = -1
+                self.monsterX = random.randint(self.monsterWidth/2+Layout.borderOffSet,Layout.screen_width-Layout.borderOffSet-self.monsterWidth/2)
+                self.monsterY = random.randint(self.monsterHeight/2+Layout.topOffSet,Layout.screen_height-Layout.borderOffSet-self.monsterHeight/2)
+            i+=1
         #represents the image
         self.imageSurface = pygame.transform.scale(pygame.image.load(GameImages.monsterImage).convert_alpha(),(self.monsterWidth,self.monsterHeight))
         
@@ -32,7 +38,7 @@ class AMonster:
         if self.currentHealth <= 0:
             # The monster is dead.
             return False
-        if self.delay == 10:
+        if self.delay == self.delayTimer:
             #random movement
             pair = self.movements[random.randint(0,len(self.movements)-1)]
             #CHECKS THE BORDER BOUNDARIES 
@@ -44,8 +50,8 @@ class AMonster:
             self.monsterY += pair[1]
             if self.monsterY > Layout.screen_height-self.monsterHeight/2-Layout.borderOffSet:
                 self.monsterY = Layout.screen_height-self.monsterHeight/2-Layout.borderOffSet
-            elif self.monsterY < self.monsterHeight/2+Layout.topOffSet+5:
-                self.monsterY = self.monsterHeight/2+Layout.topOffSet+5
+            elif self.monsterY < self.monsterHeight/2+Layout.topOffSet:
+                self.monsterY = self.monsterHeight/2+Layout.topOffSet
         self.delay += 1
         #resets delay
         if self.delay > self.delayTimer:
@@ -56,7 +62,7 @@ class AMonster:
         #monster display
         gameDisplay.blit(self.imageSurface,[self.monsterX - self.monsterWidth/2,self.monsterY - self.monsterHeight/2,self.monsterWidth,self.monsterHeight])
         #health bar
-        pygame.draw.rect(gameDisplay,Color.red if self.currentHealth > 1 else Color.darkred if self.currentHealth > 0 else Color.grayish,[(self.monsterX - self.monsterWidth/2)+self.monsterWidth*(1-(self.currentHealth/float(self.maxHealth))),self.monsterY - self.monsterHeight/2,self.monsterWidth*(self.currentHealth/float(self.maxHealth)),2])
+        pygame.draw.rect(gameDisplay,Color.red if self.currentHealth/self.maxHealth > .5 else Color.darkred if self.currentHealth/self.currentHealth > .25 else Color.grayish,[(self.monsterX - self.monsterWidth/2)+self.monsterWidth*(1-(self.currentHealth/float(self.maxHealth))),self.monsterY - self.monsterHeight/2,self.monsterWidth*(self.currentHealth/float(self.maxHealth)),2])
         
     def gotHitByBullet(self):
         self.currentHealth -= 1
@@ -69,8 +75,13 @@ class AMonster:
             bullet.remove()
             return True
         return False
-            
+       
     def checkBulletHitList(self, bulletList):
         for bullet in bulletList:
             if self.checkBulletHit(bullet):
                 break
+                
+    def checkMonsterRect(self,monsterX,monsterY):
+        if self.monsterX - self.monsterWidth/2 <= monsterX and self.monsterX + self.monsterWidth/2 >= monsterX:
+            return True
+        return False
