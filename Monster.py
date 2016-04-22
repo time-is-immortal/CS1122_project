@@ -9,10 +9,6 @@ class AMonster:
         #health
         self.currentHealth = 2
         self.maxHealth = 3
-        #random spawn location
-        #does not test if spwaning on player*************
-        self.monsterX = random.randint(Layout.borderOffSet,Layout.screen_width-Layout.borderOffSet)
-        self.monsterY = random.randint(Layout.borderOffSet,Layout.screen_height-Layout.borderOffSet)
         #dimensions
         self.monsterWidth = 50
         self.monsterHeight = 50
@@ -24,16 +20,19 @@ class AMonster:
         #possible movements
         self.movements = ['up','down','left','right']
         self.values = {'up':(0,-monsterMove),'down':(0,monsterMove),'left':(-monsterMove,0),'right':(monsterMove,0)}
+        #random spawn location
+        #does not test if spawning on player*************
+        self.monsterX = random.randint(Layout.borderOffSet,Layout.screen_width-Layout.borderOffSet)
+        self.monsterY = random.randint(self.monsterHeight/2+Layout.topOffSet,Layout.screen_height-Layout.borderOffSet)
         
         #represents the image
         self.imageSurface = pygame.transform.scale(pygame.image.load(GameImages.monsterImage).convert_alpha(),(self.monsterWidth,self.monsterHeight))
         
     #update monster position
     def update(self):
-        return
         if self.currentHealth <= 0:
             # The monster is dead.
-            return
+            return False
         if self.delay == 10:
             #random movement
             pair = self.values[self.movements[random.randint(0,len(self.movements)-1)]]
@@ -52,12 +51,13 @@ class AMonster:
         #resets delay
         if self.delay > self.delayTimer:
            self.delay = 0 
+        return True
         
     def drawUpdate(self, gameDisplay):
         #monster display
         gameDisplay.blit(self.imageSurface,[self.monsterX - self.monsterWidth/2,self.monsterY - self.monsterHeight/2,self.monsterWidth,self.monsterHeight])
         #health bar
-        #pygame.draw.rect(gameDisplay,Color.red if self.currentHealth > 1 else Color.darkred if self.currentHealth > 0 else Color.grayish,[(self.monsterX - self.monsterWidth/2)+(self.monsterX - self.monsterWidth/2)*(1-(self.currentHealth/float(self.maxHealth))),self.monsterY - self.monsterHeight/2,self.monsterWidth*(self.currentHealth/float(self.maxHealth)),2])
+        pygame.draw.rect(gameDisplay,Color.red if self.currentHealth > 1 else Color.darkred if self.currentHealth > 0 else Color.grayish,[(self.monsterX - self.monsterWidth/2)+self.monsterWidth*(1-(self.currentHealth/float(self.maxHealth))),self.monsterY - self.monsterHeight/2,self.monsterWidth*(self.currentHealth/float(self.maxHealth)),2])
         
     def gotHitByBullet(self):
         self.currentHealth -= 1

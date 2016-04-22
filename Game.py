@@ -14,6 +14,9 @@ pygame.display.set_caption('BestNameEver!')
 
 gameExit = False
 
+#current level
+level = 10
+
 #time for frames per sec
 clock = pygame.time.Clock()
 framesPerSec = 60
@@ -21,8 +24,12 @@ framesPerSec = 60
 #player
 player = User()
 
-#monster
-monster = AMonster()
+#list of monsters
+monsterList = []
+
+#insert monsters
+for i in range(level):
+    monsterList.append(AMonster())
 
 mouseX = 0
 mouseY = 0
@@ -69,13 +76,19 @@ while not gameExit:
     #make the color of the screen
     #will always be first
     gameDisplay.fill(Color.white)
+    
     #update the player
     player.update()
     player.drawUpdate(gameDisplay)
-	
-    monster.checkBulletHitList(player.bulletList)
-    monster.update()
-    monster.drawUpdate(gameDisplay)
+    
+    #update monsters
+    for aMonster in monsterList:
+        aMonster.checkBulletHitList(player.bulletList)
+        if aMonster.update():
+            aMonster.drawUpdate(gameDisplay)
+        else:
+            monsterList.remove(aMonster)
+            
     #another way to draw rectangle
     #gameDisplay.fill(red, rect=[200,200,50,50])
     
