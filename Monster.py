@@ -30,7 +30,6 @@ class AMonster:
         
     #update monster position
     def update(self):
-        return
         if self.currentHealth <= 0:
             # The monster is dead.
             return
