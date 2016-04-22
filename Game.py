@@ -29,8 +29,7 @@ monsterList = []
 
 #insert monsters
 for i in range(level):
-   tempMonster = AMonster(monsterList)
-   monsterList.append(tempMonster)
+   monsterList.append(AMonster(monsterList,player))
 
 mouseX = 0
 mouseY = 0
@@ -88,18 +87,20 @@ while not gameExit:
     #will always be first
     gameDisplay.fill(Color.white)
     
-    #update the player
-    player.update()
-    player.drawUpdate(gameDisplay)
-    
     #update monsters
     for aMonster in monsterList:
         aMonster.checkBulletHitList(player.bulletList)
-        if aMonster.update():
+        if aMonster.update(monsterList,player):
             aMonster.drawUpdate(gameDisplay)
-        else:
-            monsterList.remove(aMonster)
-            
+    
+    #update the player
+    player.update()
+    if player.drawUpdate(gameDisplay):
+        print "_________________________________________GG WP_________________________________________"
+        print "Monsters killed : " + str(level-len(monsterList))
+        print "\n\n\n\n\n\n\n\n"
+        break
+         
     #another way to draw rectangle
     #gameDisplay.fill(red, rect=[200,200,50,50])
     
@@ -108,7 +109,7 @@ while not gameExit:
     #frames per sec, try to avoid changing this in code, keep it as a const
     clock.tick(framesPerSec) 
 
-#unnitializing pygame
+# unnitializing pygame
 pygame.quit()
-#leave python
+# leave python
 quit()

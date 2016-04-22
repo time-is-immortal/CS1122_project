@@ -8,7 +8,7 @@ class User:
     #constructor
     def __init__(self):
         #ammo
-        self.ammo = 10
+        self.ammo = 20
         #health
         self.currentHealth = 10
         self.maxHealth = 10
@@ -99,7 +99,6 @@ class User:
             if state == 0:
                 offset = (self.mouseY-self.playerY, self.mouseX-self.playerX) #should calculate angle between player and mouse, unsure if this works
                 angle = 135-math.degrees(math.atan2(*offset))
-                print(angle)
                 #angle = 0 #placeholder
                 playerBullet = Bullet(self.playerX, self.playerY, angle)
                 
@@ -115,7 +114,9 @@ class User:
                     playerBullet = Bullet(self.playerX, self.playerY, 135)
             self.bulletList.append(playerBullet)
             self.ammo -= 1
-            
+    def loseHealth(self,num):
+        self.currentHealth -= num;
+    
     def reloadImage(self):
         if self.currentFace != self.newFace:
             self.image = pygame.transform.scale(pygame.image.load(GameImages.playerImage[self.newFace]).convert_alpha(),(self.playerWidth,self.playerHeight))
@@ -123,6 +124,8 @@ class User:
         return self.image    
         
     def drawUpdate(self, gameDisplay):
+        if self.currentHealth <= 0:
+            return True
         #player display
         gameDisplay.blit(self.reloadImage(),[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
         #health bar
@@ -138,4 +141,4 @@ class User:
                 del self.bulletList[index]
             else:
                 bullet.drawUpdate(gameDisplay)
-            
+        return False   

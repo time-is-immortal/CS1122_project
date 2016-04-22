@@ -8,6 +8,7 @@ class Color:
     green = (0,255,0)
     blue = (0,0,255)
     grayish = (192,192,192)
+    antiquewhite = (250,235,215)
    
 #define borders
 class Layout:
