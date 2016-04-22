@@ -14,12 +14,12 @@ class Bullet:
     self.isOffScreen = False
     
   def drawUpdate(self, gameDisplay): #moves the bullet according to velocity, then draws it
-    if self.x_coord < Layout.screen_width and self.y_coord < Layout.screen_height: #checks if bullet is off screen
+    if self.x_coord > Layout.screen_width or self.x_coord < 0 or self.y_coord > Layout.screen_height or self.y_coord < 0: #checks if bullet is off screen
+      self.isOffScreen = True #this is here so player knows it can be deleted from the player's bulletList
+    else:
       self.x_coord += self.speed[0]
       self.y_coord += self.speed[1]
       pygame.draw.circle(gameDisplay, Color.green, [int(round(self.x_coord)), int(round(self.y_coord))], 5, 3)
-    else:
-      self.isOffScreen = True #this is here so player knows it can be deleted from the player's bulletList
     
   def remove(self):
     self.isOffScreen = True # We may have a more elegant way of doing this later.
