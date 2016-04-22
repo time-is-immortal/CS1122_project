@@ -94,7 +94,6 @@ class User:
         self.mouseY = pos[1]
 
     def shootBullet(self, state): #pew pew
-        self.currentHealth -=1
         if self.ammo > 0:
             #state is 0 use the mouse
             if state == 0:
