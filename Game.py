@@ -9,7 +9,7 @@ pygame.init()
 
 #need to make a canvas
 #requires a tuple (aka the size of windows)
-gameDisplay = pygame.display.set_mode((Layout.screen_width,Layout.screen_height))
+gameDisplay = pygame.display.set_mode((Layout.SCREEN_WIDTH,Layout.SCREEN_HEIGHT))
 pygame.display.set_caption('BestNameEver!')
 
 gameExit = False
@@ -85,7 +85,7 @@ while not gameExit:
 
     #make the color of the screen
     #will always be first
-    gameDisplay.fill(Color.white)
+    gameDisplay.fill(Color.WHITE)
     
     #update monsters
     for aMonster in monsterList:
@@ -102,7 +102,7 @@ while not gameExit:
         break
          
     #another way to draw rectangle
-    #gameDisplay.fill(red, rect=[200,200,50,50])
+    #gameDisplay.fill(RED, rect=[200,200,50,50])
     
     pygame.display.update()
 

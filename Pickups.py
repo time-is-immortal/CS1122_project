@@ -1,5 +1,5 @@
 import pygame
-
+from Design import *
 class Pickups:
   def __init__(self, x_coord, y_coord):
     self.x_coord = x_coord
@@ -21,6 +21,8 @@ class AmmoPickUp(Pickups):
     super().__init__(x_coord, y_coord)
   def getPickedUp(self, player): #call this when player picks this up
     player.ammo += 5
+    if player.ammo > PlayerConstants.AMMOLIMIT
+        player.ammo = AMMOLIMIT
     pickedUp = True
   def drawUpdate(self, gameDisplay):
     if not PickedUp:

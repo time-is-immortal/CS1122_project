@@ -22,18 +22,18 @@ class AMonster:
         
         #random spawn location
         #does not spawn on other monsters nor the player
-        self.monsterX = random.randint(self.monsterWidth/2+Layout.borderOffSet,Layout.screen_width-Layout.borderOffSet-self.monsterWidth/2)
-        self.monsterY = random.randint(self.monsterHeight/2+Layout.topOffSet,Layout.screen_height-Layout.borderOffSet-self.monsterHeight/2)
+        self.monsterX = random.randint(self.monsterWidth/2+Layout.BORDEROFFSET,Layout.SCREEN_WIDTH-Layout.BORDEROFFSET-self.monsterWidth/2)
+        self.monsterY = random.randint(self.monsterHeight/2+Layout.TOPOFFSET,Layout.SCREEN_HEIGHT-Layout.BORDEROFFSET-self.monsterHeight/2)
         #checks to reload spawn location 
         i = 0
         while i < len(monsterList):
-            if self.checkMonsterRect(player.playerX,player.playerY,player.playerWidth,player.playerHeight) or monsterList[i].checkMonsterRect(self.monsterX,self.monsterY,self.monsterWidth,self.monsterHeight):
+            if self.checkMonsterRect(player.playerX,player.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT) or monsterList[i].checkMonsterRect(self.monsterX,self.monsterY,self.monsterWidth,self.monsterHeight):
                 i = -1
-                self.monsterX = random.randint(self.monsterWidth/2+Layout.borderOffSet,Layout.screen_width-Layout.borderOffSet-self.monsterWidth/2)
-                self.monsterY = random.randint(self.monsterHeight/2+Layout.topOffSet,Layout.screen_height-Layout.borderOffSet-self.monsterHeight/2)
+                self.monsterX = random.randint(self.monsterWidth/2+Layout.BORDEROFFSET,Layout.SCREEN_WIDTH-Layout.BORDEROFFSET-self.monsterWidth/2)
+                self.monsterY = random.randint(self.monsterHeight/2+Layout.TOPOFFSET,Layout.SCREEN_HEIGHT-Layout.BORDEROFFSET-self.monsterHeight/2)
             i+=1
         #represents the image
-        self.imageSurface = pygame.transform.scale(pygame.image.load(GameImages.monsterImage).convert_alpha(),(self.monsterWidth,self.monsterHeight))
+        self.imageSurface = pygame.transform.scale(pygame.image.load(GameImages.MONSTERIMAGE).convert_alpha(),(self.monsterWidth,self.monsterHeight))
         
     #update monster position
     def update(self,monsterList,player):
@@ -53,17 +53,17 @@ class AMonster:
                 i+=1
             #CHECKS THE BORDER BOUNDARIES 
             self.monsterX += pair[0]
-            if self.monsterX > Layout.screen_width-self.monsterWidth/2-Layout.borderOffSet:
-                self.monsterX = Layout.screen_width-self.monsterWidth/2-Layout.borderOffSet
-            elif self.monsterX < self.monsterWidth/2+Layout.borderOffSet:
-                self.monsterX = self.monsterWidth/2+Layout.borderOffSet
+            if self.monsterX > Layout.SCREEN_WIDTH-self.monsterWidth/2-Layout.BORDEROFFSET:
+                self.monsterX = Layout.SCREEN_WIDTH-self.monsterWidth/2-Layout.BORDEROFFSET
+            elif self.monsterX < self.monsterWidth/2+Layout.BORDEROFFSET:
+                self.monsterX = self.monsterWidth/2+Layout.BORDEROFFSET
             self.monsterY += pair[1]
-            if self.monsterY > Layout.screen_height-self.monsterHeight/2-Layout.borderOffSet:
-                self.monsterY = Layout.screen_height-self.monsterHeight/2-Layout.borderOffSet
-            elif self.monsterY < self.monsterHeight/2+Layout.topOffSet:
-                self.monsterY = self.monsterHeight/2+Layout.topOffSet
+            if self.monsterY > Layout.SCREEN_HEIGHT-self.monsterHeight/2-Layout.BORDEROFFSET:
+                self.monsterY = Layout.SCREEN_HEIGHT-self.monsterHeight/2-Layout.BORDEROFFSET
+            elif self.monsterY < self.monsterHeight/2+Layout.TOPOFFSET:
+                self.monsterY = self.monsterHeight/2+Layout.TOPOFFSET
         #checks if collides with player
-        if self.checkMonsterRect(player.playerX,player.playerY,player.playerWidth,player.playerHeight): 
+        if self.checkMonsterRect(player.playerX,player.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT): 
             # The monster is dead.
             player.loseHealth(self.currentHealth)
             monsterList.remove(self)
@@ -78,7 +78,7 @@ class AMonster:
         #monster display
         gameDisplay.blit(self.imageSurface,[self.monsterX - self.monsterWidth/2,self.monsterY - self.monsterHeight/2,self.monsterWidth,self.monsterHeight])
         #health bar
-        pygame.draw.rect(gameDisplay,Color.red if self.currentHealth/self.maxHealth > .5 else Color.darkred if self.currentHealth/self.currentHealth > .25 else Color.grayish,[(self.monsterX - self.monsterWidth/2)+self.monsterWidth*(1-(self.currentHealth/float(self.maxHealth))),self.monsterY - self.monsterHeight/2,self.monsterWidth*(self.currentHealth/float(self.maxHealth)),2])
+        pygame.draw.rect(gameDisplay,Color.RED if self.currentHealth/self.maxHealth > .5 else Color.DARKRED if self.currentHealth/self.currentHealth > .25 else Color.GRAYISH,[(self.monsterX - self.monsterWidth/2)+self.monsterWidth*(1-(self.currentHealth/float(self.maxHealth))),self.monsterY - self.monsterHeight/2,self.monsterWidth*(self.currentHealth/float(self.maxHealth)),2])
         
     def gotHitByBullet(self):
         self.currentHealth -= 1

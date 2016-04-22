@@ -11,13 +11,9 @@ class User:
         self.ammo = 20
         #health
         self.currentHealth = 10
-        self.maxHealth = 10
         #spawn location 
         self.playerX = 300
         self.playerY = 300
-        #dimensions
-        self.playerWidth = 50
-        self.playerHeight = 50
         #movement options, continous, noncontinous, mouse tracking
         self.PlayerXChange = 0
         self.PlayerYChange = 0
@@ -34,7 +30,7 @@ class User:
         #font
         self.font = pygame.font.SysFont("comicsansms", 20)
         #represents the image
-        self.image = pygame.transform.scale(pygame.image.load(GameImages.playerImage[self.currentFace]).convert_alpha(),(self.playerWidth,self.playerHeight))
+        self.image = pygame.transform.scale(pygame.image.load(GameImages.PLAYERIMAGE[self.currentFace]).convert_alpha(),(PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT))
         
     #change movement
     #yes moving
@@ -80,15 +76,15 @@ class User:
             self.PlayerYChange = 0 
         #CHECKS THE BORDER BOUNDARIES  
         self.playerX += self.PlayerXChange
-        if self.playerX > Layout.screen_width-self.playerWidth/2-Layout.borderOffSet:
-            self.playerX = Layout.screen_width-self.playerWidth/2-Layout.borderOffSet
-        elif self.playerX < self.playerWidth/2+Layout.borderOffSet:
-            self.playerX = self.playerWidth/2+Layout.borderOffSet
+        if self.playerX > Layout.SCREEN_WIDTH-PlayerConstants.PLAYERWIDTH/2-Layout.BORDEROFFSET:
+            self.playerX = Layout.SCREEN_WIDTH-PlayerConstants.PLAYERWIDTH/2-Layout.BORDEROFFSET
+        elif self.playerX < PlayerConstants.PLAYERWIDTH/2+Layout.BORDEROFFSET:
+            self.playerX = PlayerConstants.PLAYERWIDTH/2+Layout.BORDEROFFSET
         self.playerY += self.PlayerYChange
-        if self.playerY > Layout.screen_height-self.playerHeight/2-Layout.borderOffSet:
-            self.playerY = Layout.screen_height-self.playerHeight/2-Layout.borderOffSet
-        elif self.playerY < self.playerHeight/2+Layout.topOffSet:
-            self.playerY = self.playerHeight/2+Layout.topOffSet
+        if self.playerY > Layout.SCREEN_HEIGHT-PlayerConstants.PLAYERHEIGHT/2-Layout.BORDEROFFSET:
+            self.playerY = Layout.SCREEN_HEIGHT-PlayerConstants.PLAYERHEIGHT/2-Layout.BORDEROFFSET
+        elif self.playerY < PlayerConstants.PLAYERHEIGHT/2+Layout.TOPOFFSET:
+            self.playerY = PlayerConstants.PLAYERHEIGHT/2+Layout.TOPOFFSET
         pos = pygame.mouse.get_pos()
         self.mouseX = pos[0]
         self.mouseY = pos[1]
@@ -119,7 +115,7 @@ class User:
     
     def reloadImage(self):
         if self.currentFace != self.newFace:
-            self.image = pygame.transform.scale(pygame.image.load(GameImages.playerImage[self.newFace]).convert_alpha(),(self.playerWidth,self.playerHeight))
+            self.image = pygame.transform.scale(pygame.image.load(GameImages.PLAYERIMAGE[self.newFace]).convert_alpha(),(PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT))
             self.currentFace = self.newFace
         return self.image    
         
@@ -127,15 +123,15 @@ class User:
         if self.currentHealth <= 0:
             return True
         #player display
-        gameDisplay.blit(self.reloadImage(),[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
+        gameDisplay.blit(self.reloadImage(),[self.playerX - PlayerConstants.PLAYERWIDTH/2,self.playerY - PlayerConstants.PLAYERHEIGHT/2,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT])
         #health bar
-        pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currentHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet-1])
+        pygame.draw.rect(gameDisplay,Color.RED,[(Layout.SCREEN_WIDTH-Layout.HEALTHBARWIDTH)+Layout.HEALTHBARWIDTH*(1-self.currentHealth/float(PlayerConstants.MAXHEALTH)),0,Layout.SCREEN_WIDTH,Layout.TOPOFFSET-1])
         #display ammo
         if self.ammo > 0:
-            text = self.font.render("Ammo:" + str(self.ammo), True, Color.black)
+            text = self.font.render("Ammo:" + str(self.ammo), True, Color.BLACK)
         else:   
-            text = self.font.render("No Ammo", True, Color.red)
-        gameDisplay.blit(text,[Layout.ammoTextPadding,0,0,Layout.topOffSet])
+            text = self.font.render("No Ammo", True, Color.RED)
+        gameDisplay.blit(text,[Layout.AMMOTEXTPADDING,0,0,Layout.TOPOFFSET])
         for index, bullet in enumerate(self.bulletList): #update every bullet on screen
             if bullet.isOffScreen:
                 del self.bulletList[index]
