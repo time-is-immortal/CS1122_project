@@ -8,7 +8,7 @@ class User:
     #constructor
     def __init__(self):
         #ammo
-        self.ammo = 9999999
+        self.ammo = 10
         #health
         self.currentHealth = 10
         self.maxHealth = 10
@@ -31,7 +31,8 @@ class User:
         self.newFace = MoveConstants.UP
         self.currentFace = MoveConstants.UP
         self.bulletList = [] #list of bullets on screen, will iterate through to update their positions
-        
+        #font
+        self.font = pygame.font.SysFont("comicsansms", 30)
         #represents the image
         self.image = pygame.transform.scale(pygame.image.load(GameImages.playerImage[self.currentFace]).convert_alpha(),(self.playerWidth,self.playerHeight))
         
@@ -131,7 +132,11 @@ class User:
         #health bar
         pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currentHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])
         #display ammo
-        
+        if self.ammo > 0:
+            text = self.font.render("Ammo:" + str(self.ammo), True, Color.black)
+        else:   
+            text = self.font.render("No Ammo", True, Color.red)
+        gameDisplay.blit(text,[40,0,0,Layout.topOffSet])
         for index, bullet in enumerate(self.bulletList): #update every bullet on screen
             if bullet.isOffScreen:
                 del self.bulletList[index]

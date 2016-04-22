@@ -1,4 +1,5 @@
 
+
 #define colors    
 class Color:
     white = (255,255,255)
@@ -8,7 +9,7 @@ class Color:
     green = (0,255,0)
     blue = (0,0,255)
     grayish = (192,192,192)
-
+   
 #define borders
 class Layout:
     screen_width = 800
@@ -30,3 +31,4 @@ class MoveConstants():
     DOWN = 1
     LEFT = 2
     RIGHT = 3
+    
