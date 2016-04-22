@@ -21,9 +21,12 @@ class User:
         #movement shift
         self.playerMoveRate = 5
         #last movement
-        self.lastMoveIdx = -1
+        self.lastMoveIdx = 0
         #current move
         self.CurrentMoveIdx = -1
+        self.tempIdx = -1
+        #current image
+        self.image = pygame.transform.scale(pygame.image.load(GameImages.playerImage[0]).convert_alpha(),(self.playerWidth,self.playerHeight))
         #possible movement rates
         self.movements = [(0,-self.playerMoveRate),(0,self.playerMoveRate),(-self.playerMoveRate,0),(self.playerMoveRate,0)]
         self.mouseX = 0
@@ -36,6 +39,7 @@ class User:
     #player moves in direction of key
     def playerMove(self,moveType):
         self.CurrentMoveIdx = moveType
+        self.tempIdx = moveType
     #no moving
     #in direction you let go
     def playerStop(self):
@@ -71,14 +75,15 @@ class User:
         playerBullet = Bullet(self.playerX, self.playerY, angle)
         self.bulletList.append(playerBullet)
         self.ammo -= 1
-
+    
+    def reloadImage(self):
+        if self.tempIdx != self.lastMoveIdx:
+            self.image = pygame.transform.scale(pygame.image.load(GameImages.playerImage[self.tempIdx]).convert_alpha(),(self.playerWidth,self.playerHeight))
+        return self.image
+        
     def drawUpdate(self, gameDisplay):
         #player display
-        moveIdx = self.CurrentMoveIdx
-        if moveIdx<0:
-            moveIdx = self.lastMoveIdx
-        playerForwardImage = GameImages.playerImage[moveIdx]
-        gameDisplay.blit(pygame.transform.scale(pygame.image.load(playerForwardImage).convert_alpha(),(self.playerWidth,self.playerHeight)),[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
+        gameDisplay.blit(self.reloadImage(),[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
         #health bar
         pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currentHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])
         
