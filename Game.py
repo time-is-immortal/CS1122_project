@@ -49,21 +49,37 @@ while not gameExit:
         #Using Keypad to move
         if event.type == pygame.KEYDOWN and player.locateCurrentMove()<0:
             #left or right
-            if event.key == pygame.K_LEFT:
-                player.playerMove(MoveConstants.LEFT)
-            if event.key == pygame.K_RIGHT:
-                player.playerMove(MoveConstants.RIGHT)
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                #player.playerMoveX(MoveConstants.LEFT)
+                player.leftTrue()
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                #player.playerMoveX(MoveConstants.RIGHT)
+                player.rightTrue()
             #up or down
-            if event.key == pygame.K_UP:
-                player.playerMove(MoveConstants.UP)
-            if event.key == pygame.K_DOWN:
-                player.playerMove(MoveConstants.DOWN)
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
+                #player.playerMoveY(MoveConstants.UP)
+                player.upTrue()
+            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                #player.playerMoveY(MoveConstants.DOWN)
+                player.downTrue()
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_a:
+                player.leftFalse()
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
+                player.rightFalse()
+            if event.key == pygame.K_UP or event.key == pygame.K_w:
+                player.upFalse()
+            if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                player.downFalse()
+            #player should stop moving in given direction
+            #player.playerStop()  
         #shoot bullet
         if event.type == pygame.MOUSEBUTTONDOWN:
-            player.shootBullet()    
-        if event.type == pygame.KEYUP:
-            #player should stop moving
-            player.playerStop()  
+            player.shootBullet(0)
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                player.shootBullet(1)
+        
 
     #check collisions, game logic stuff
     #update graphcs to screen
