@@ -8,7 +8,7 @@ class AMonster:
     def __init__(self):
         #health
         self.currentHealth = 2
-        self.maxHealth = 2
+        self.maxHealth = 3
         #random spawn location
         #does not test if spwaning on player*************
         self.monsterX = random.randint(Layout.borderOffSet,Layout.screen_width-Layout.borderOffSet)
@@ -30,6 +30,7 @@ class AMonster:
         
     #update monster position
     def update(self):
+        return
         if self.currentHealth <= 0:
             # The monster is dead.
             return
@@ -56,7 +57,7 @@ class AMonster:
         #monster display
         gameDisplay.blit(self.imageSurface,[self.monsterX - self.monsterWidth/2,self.monsterY - self.monsterHeight/2,self.monsterWidth,self.monsterHeight])
         #health bar
-        #pygame.draw.rect(gameDisplay,Color.red if self.currentHealth > 1 else Color.darkred if self.currentHealth > 0 else Color.grayish,[self.monsterX - self.monsterWidth/2,self.monsterY - self.monsterHeight/2,self.monsterWidth,self.monsterY -1- self.monsterHeight/2])
+        #pygame.draw.rect(gameDisplay,Color.red if self.currentHealth > 1 else Color.darkred if self.currentHealth > 0 else Color.grayish,[(self.monsterX - self.monsterWidth/2)+(self.monsterX - self.monsterWidth/2)*(1-(self.currentHealth/float(self.maxHealth))),self.monsterY - self.monsterHeight/2,self.monsterWidth*(self.currentHealth/float(self.maxHealth)),2])
         
     def gotHitByBullet(self):
         self.currentHealth -= 1
