@@ -31,9 +31,11 @@ monsterList = []
 for i in range(level):
     monsterList.append(AMonster())
 
-#track mouse    
 mouseX = 0
 mouseY = 0
+
+#shoot mode TOGGLE with key R
+shoot = False
 
 while not gameExit:
     #they take care of event handling
@@ -41,28 +43,34 @@ while not gameExit:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gameExit = True
-            
         #Using Mouse to Move
         if event.type == pygame.MOUSEMOTION:
             (mouseX, mouseY) = pygame.mouse.get_pos()
         
         #Using Keypad to move
-        if event.type == pygame.KEYDOWN and player.locateCurrentMove()<0:
+        if event.type == pygame.KEYDOWN:
             #left or right
             if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                #player.playerMoveX(MoveConstants.LEFT)
                 player.leftTrue()
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                #player.playerMoveX(MoveConstants.RIGHT)
                 player.rightTrue()
             #up or down
             if event.key == pygame.K_UP or event.key == pygame.K_w:
-                #player.playerMoveY(MoveConstants.UP)
                 player.upTrue()
             if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                #player.playerMoveY(MoveConstants.DOWN)
                 player.downTrue()
+            if event.key == pygame.K_r:
+                shoot = not shoot
+        #shoot bullet via mouse
+        if event.type == pygame.MOUSEBUTTONDOWN and shoot == True:
+            player.shootBullet(0)
+        #shoot bullet via spacebar
+        elif event.type == pygame.KEYDOWN and shoot == False:
+            if event.key == pygame.K_SPACE:
+                player.shootBullet(1)
         if event.type == pygame.KEYUP:
+            #player should stop moving
+            #in said direction
             if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                 player.leftFalse()
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
@@ -71,15 +79,6 @@ while not gameExit:
                 player.upFalse()
             if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 player.downFalse()
-            #player should stop moving in given direction
-            #player.playerStop()  
-        #shoot bullet
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            player.shootBullet(0)
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE:
-                player.shootBullet(1)
-        
 
     #check collisions, game logic stuff
     #update graphcs to screen
