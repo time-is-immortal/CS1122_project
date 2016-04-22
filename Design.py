@@ -21,3 +21,5 @@ class Layout:
 class GameImages:
     playerImage = "static/player.png"
     monsterImage = "static/virus.png"
+    healthImage = "static/pickup_Health.png"
+    ammoImage = "static/pickup_Ammo.png"
