@@ -44,8 +44,8 @@ class AMonster:
             self.monsterY += pair[1]
             if self.monsterY > Layout.screen_height-self.monsterHeight/2-Layout.borderOffSet:
                 self.monsterY = Layout.screen_height-self.monsterHeight/2-Layout.borderOffSet
-            elif self.monsterY < self.monsterHeight/2+Layout.topOffSet:
-                self.monsterY = self.monsterHeight/2+Layout.topOffSet
+            elif self.monsterY < self.monsterHeight/2+Layout.topOffSet+5:
+                self.monsterY = self.monsterHeight/2+Layout.topOffSet+5
         self.delay += 1
         #resets delay
         if self.delay > self.delayTimer:

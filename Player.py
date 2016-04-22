@@ -32,7 +32,7 @@ class User:
         self.currentFace = MoveConstants.UP
         self.bulletList = [] #list of bullets on screen, will iterate through to update their positions
         #font
-        self.font = pygame.font.SysFont("comicsansms", 30)
+        self.font = pygame.font.SysFont("comicsansms", 20)
         #represents the image
         self.image = pygame.transform.scale(pygame.image.load(GameImages.playerImage[self.currentFace]).convert_alpha(),(self.playerWidth,self.playerHeight))
         
@@ -94,6 +94,7 @@ class User:
         self.mouseY = pos[1]
 
     def shootBullet(self, state): #pew pew
+        self.currentHealth -=1
         if self.ammo > 0:
             #state is 0 use the mouse
             if state == 0:
@@ -105,10 +106,6 @@ class User:
                 
             #state is 1 use space key
             elif state == 1:
-                #Up is 224 degrees 225
-                #right is 133
-                #down is 42
-                #left is 314 135
                 if self.currentFace == MoveConstants.UP:
                     playerBullet = Bullet(self.playerX, self.playerY, -135)
                 elif self.currentFace == MoveConstants.DOWN:
@@ -136,7 +133,7 @@ class User:
             text = self.font.render("Ammo:" + str(self.ammo), True, Color.black)
         else:   
             text = self.font.render("No Ammo", True, Color.red)
-        gameDisplay.blit(text,[40,0,0,Layout.topOffSet])
+        gameDisplay.blit(text,[Layout.ammoTextPadding,0,0,Layout.topOffSet])
         for index, bullet in enumerate(self.bulletList): #update every bullet on screen
             if bullet.isOffScreen:
                 del self.bulletList[index]

@@ -1,5 +1,4 @@
 
-
 #define colors    
 class Color:
     white = (255,255,255)
@@ -16,7 +15,8 @@ class Layout:
     screen_height = 600
     borderOffSet = 5
     topOffSet = 25
-    healthBarWidth = 500
+    healthBarWidth = 800
+    ammoTextPadding = 10
 
 #define game images
 class GameImages:
