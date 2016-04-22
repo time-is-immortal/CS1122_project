@@ -18,70 +18,48 @@ class User:
         #dimensions
         self.playerWidth = 50
         self.playerHeight = 50
-        #movement options, continous, noncontinous, mouse tracking
-        self.PlayerXChange = 0
-        self.PlayerYChange = 0
-        self.pDown = False
-        self.pUp = False
-        self.pLeft = False
-        self.pRight = False
+        #movement shift
+        self.playerMoveRate = 5
+        #last movement
+        self.lastMoveIdx = -1
+        #current move
+        self.CurrentMoveIdx = -1
+        #possible movement rates
+        self.movements = [(0,-self.playerMoveRate),(0,self.playerMoveRate),(-self.playerMoveRate,0),(self.playerMoveRate,0)]
         self.mouseX = 0
         self.mouseY = 0
         
         self.bulletList = [] #list of bullets on screen, will iterate through to update their positions
         
-        #represents the image
-        self.imageSurface = pygame.transform.scale(pygame.image.load(GameImages.playerImage).convert_alpha(),(self.playerWidth,self.playerHeight))
-        
     #change movement
     #yes moving
     #player moves in direction of key
-    def leftTrue(self):
-        self.pLeft = True
-    def rightTrue(self):
-        self.pRight = True
-    def upTrue(self):
-        self.pUp = True
-    def downTrue(self):
-        self.pDown = True
+    def playerMove(self,moveType):
+        self.CurrentMoveIdx = moveType
     #no moving
     #in direction you let go
-    def leftFalse(self):
-        self.pLeft = False
-    def rightFalse(self):
-        self.pRight = False
-    def upFalse(self):
-        self.pUp = False
-    def downFalse(self):
-        self.pDown = False
-
-
+    def playerStop(self):
+        self.lastMoveIdx = self.CurrentMoveIdx
+        self.CurrentMoveIdx = -1
+    #current move
+    def locateCurrentMove(self):
+        self.CurrentMoveIdx = -1
     #update
     #update player position
     def update(self):
-        if self.pLeft == True:
-            self.PlayerXChange = -5
-        elif self.pRight is True:
-            self.PlayerXChange = 5
-        else:
-            self.PlayerXChange = 0
-        if self.pUp is True:
-            self.PlayerYChange = -5
-        elif self.pDown is True:
-            self.PlayerYChange = 5
-        else:
-            self.PlayerYChange = 0 
-        #CHECKS THE BORDER BOUNDARIES  
-        self.playerX += self.PlayerXChange
-        if self.playerX > Layout.screen_width-self.playerWidth/2-Layout.borderOffSet:
-            self.playerX = Layout.screen_width-self.playerWidth/2-Layout.borderOffSet
-        elif self.playerX < self.playerWidth/2+Layout.borderOffSet:
-            self.playerX = self.playerWidth/2+Layout.borderOffSet
-        self.playerY += self.PlayerYChange
-        if self.playerY > Layout.screen_height-self.playerHeight/2-Layout.borderOffSet:
-            self.playerY = Layout.screen_height-self.playerHeight/2-Layout.borderOffSet
-        elif self.playerY < self.playerHeight/2+Layout.topOffSet:
-            self.playerY = self.playerHeight/2+Layout.topOffSet
+        if(self.CurrentMoveIdx>=0):
+            pair = self.movements[self.CurrentMoveIdx]
+            #CHECKS THE BORDER BOUNDARIES  
+            self.playerX += pair[0]
+            if self.playerX > Layout.screen_width-self.playerWidth/2-Layout.borderOffSet:
+                self.playerX = Layout.screen_width-self.playerWidth/2-Layout.borderOffSet
+            elif self.playerX < self.playerWidth/2+Layout.borderOffSet:
+                self.playerX = self.playerWidth/2+Layout.borderOffSet
+            self.playerY += pair[1]
+            if self.playerY > Layout.screen_height-self.playerHeight/2-Layout.borderOffSet:
+                self.playerY = Layout.screen_height-self.playerHeight/2-Layout.borderOffSet
+            elif self.playerY < self.playerHeight/2+Layout.topOffSet:
+                self.playerY = self.playerHeight/2+Layout.topOffSet
         pos = pygame.mouse.get_pos()
         self.mouseX = pos[0]
         self.mouseY = pos[1]
@@ -89,14 +67,18 @@ class User:
     def shootBullet(self): #pew pew
         offset = (self.mouseY-self.playerY, self.mouseX-self.playerX) #should calculate angle between player and mouse, unsure if this works
         angle = 135-math.degrees(math.atan2(*offset))
-        # angle = 0 #placehlder
+        #angle = 0 #placehlder
         playerBullet = Bullet(self.playerX, self.playerY, angle)
         self.bulletList.append(playerBullet)
         self.ammo -= 1
 
     def drawUpdate(self, gameDisplay):
         #player display
-        gameDisplay.blit(self.imageSurface,[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
+        moveIdx = self.CurrentMoveIdx
+        if moveIdx<0:
+            moveIdx = self.lastMoveIdx
+        playerForwardImage = GameImages.playerImage[moveIdx]
+        gameDisplay.blit(pygame.transform.scale(pygame.image.load(playerForwardImage).convert_alpha(),(self.playerWidth,self.playerHeight)),[self.playerX - self.playerWidth/2,self.playerY - self.playerHeight/2,self.playerWidth,self.playerHeight])
         #health bar
         pygame.draw.rect(gameDisplay,Color.red,[(Layout.screen_width-Layout.healthBarWidth)+Layout.healthBarWidth*(1-self.currentHealth/float(self.maxHealth)),0,Layout.screen_width,Layout.topOffSet])
         

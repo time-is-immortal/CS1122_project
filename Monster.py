@@ -16,10 +16,9 @@ class AMonster:
         self.delayTimer = 15
         self.delay = 0
         #movement shift
-        monsterMove = 20
-        #possible movements
-        self.movements = ['up','down','left','right']
-        self.values = {'up':(0,-monsterMove),'down':(0,monsterMove),'left':(-monsterMove,0),'right':(monsterMove,0)}
+        self.monsterMoveRate = 20
+        #possible movement rates
+        self.movements = [(0,-self.monsterMoveRate),(0,self.monsterMoveRate),(-self.monsterMoveRate,0),(self.monsterMoveRate,0)]
         #random spawn location
         #does not test if spawning on player*************
         self.monsterX = random.randint(Layout.borderOffSet,Layout.screen_width-Layout.borderOffSet)
@@ -35,7 +34,7 @@ class AMonster:
             return False
         if self.delay == 10:
             #random movement
-            pair = self.values[self.movements[random.randint(0,len(self.movements)-1)]]
+            pair = self.movements[random.randint(0,len(self.movements)-1)]
             #CHECKS THE BORDER BOUNDARIES 
             self.monsterX += pair[0]
             if self.monsterX > Layout.screen_width-self.monsterWidth/2-Layout.borderOffSet:

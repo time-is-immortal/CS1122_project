@@ -31,6 +31,7 @@ monsterList = []
 for i in range(level):
     monsterList.append(AMonster())
 
+#track mouse    
 mouseX = 0
 mouseY = 0
 
@@ -40,35 +41,29 @@ while not gameExit:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gameExit = True
+            
         #Using Mouse to Move
         if event.type == pygame.MOUSEMOTION:
             (mouseX, mouseY) = pygame.mouse.get_pos()
         
         #Using Keypad to move
-        if event.type == pygame.KEYDOWN:
+        if event.type == pygame.KEYDOWN and player.locateCurrentMove()<0:
             #left or right
             if event.key == pygame.K_LEFT:
-                player.leftTrue()
+                player.playerMove(MoveConstants.LEFT)
             if event.key == pygame.K_RIGHT:
-                player.rightTrue()
+                player.playerMove(MoveConstants.RIGHT)
             #up or down
             if event.key == pygame.K_UP:
-                player.upTrue()
+                player.playerMove(MoveConstants.UP)
             if event.key == pygame.K_DOWN:
-                player.downTrue()
+                player.playerMove(MoveConstants.DOWN)
+        #shoot bullet
         if event.type == pygame.MOUSEBUTTONDOWN:
             player.shootBullet()    
         if event.type == pygame.KEYUP:
             #player should stop moving
-            #in said direction
-            if event.key == pygame.K_LEFT:
-                player.leftFalse()
-            if event.key == pygame.K_RIGHT:
-                player.rightFalse()
-            if event.key == pygame.K_UP:
-                player.upFalse()
-            if event.key == pygame.K_DOWN:
-                player.downFalse()
+            player.playerStop()  
 
     #check collisions, game logic stuff
     #update graphcs to screen

@@ -19,7 +19,14 @@ class Layout:
 
 #define game images
 class GameImages:
-    playerImage = "static/player.png"
+    playerImage = ["static/playerUp.png","static/playerDown.png","static/playerLeft.png","static/playerRight.png"]
     monsterImage = "static/virus.png"
     healthImage = "static/pickup_Health.png"
     ammoImage = "static/pickup_Ammo.png"
+
+#constants for movements
+class MoveConstants():
+    UP = 0
+    DOWN = 1
+    LEFT = 2
+    RIGHT = 3
