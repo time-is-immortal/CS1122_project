@@ -2,6 +2,7 @@ import pygame
 from Player import User
 from Design import *
 from Monster import AMonster
+from Pickups import *
 
 #will initialize all modules
 #have to have it
@@ -15,7 +16,7 @@ pygame.display.set_caption('BestNameEver!')
 gameExit = False
 
 #current level
-level = 10
+level = 1
 
 #time for frames per sec
 clock = pygame.time.Clock()
@@ -27,25 +28,49 @@ player = User()
 #list of monsters
 monsterList = []
 
-#insert monsters
-for i in range(level):
-   monsterList.append(AMonster(monsterList,player))
+#list of health packs
+healthPackList = []
 
+#list of ammo packs
+ammoPackList = []
+
+#display level
+font = pygame.font.SysFont("comicsansms", 20)
+text = font.render("Level:" + str(level), True, Color.BLACK)
+
+#spawn monsters
+def spawnMonsters():
+    #insert monsters
+    value = level
+    for i in reversed(range(len(MonsterConstants.MONSTERLEVEL))):
+        for j in range(int(value/MonsterConstants.MONSTERLEVEL[i])):
+            monsterList.append(AMonster(monsterList,player,i))
+        value %= MonsterConstants.MONSTERLEVEL[i]
+    text = font.render("Level:" + str(level), True, Color.BLACK)
+    
 mouseX = 0
 mouseY = 0
 
 #shoot mode TOGGLE with key R
-shoot = False
+shoot = True
+
+#hide cursor
+pygame.mouse.set_visible(False)
+
+#cursor image
+cursorImage = pygame.transform.scale(pygame.image.load(GameImages.MONSTERIMAGE).convert_alpha(),(Layout.MOUSEDIMENSIONS,Layout.MOUSEDIMENSIONS))
 
 while not gameExit:
+    #no monsters left
+    if len(monsterList) == 0:
+        spawnMonsters()
+        level+=1
+        
     #they take care of event handling
     #i.e. if arrow key is pressed, space bar is pressed
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gameExit = True
-        #Using Mouse to Move
-        if event.type == pygame.MOUSEMOTION:
-            (mouseX, mouseY) = pygame.mouse.get_pos()
         
         #Using Keypad to move
         if event.type == pygame.KEYDOWN:
@@ -85,25 +110,38 @@ while not gameExit:
 
     #make the color of the screen
     #will always be first
-    gameDisplay.fill(Color.WHITE)
+    gameDisplay.fill(Color.ANTIQUEWHITE)
     
     #update monsters
     for aMonster in monsterList:
         aMonster.checkBulletHitList(player.bulletList)
-        if aMonster.update(monsterList,player):
+        if aMonster.update(monsterList,player,gameDisplay,healthPackList,ammoPackList):
             aMonster.drawUpdate(gameDisplay)
     
+    #update heealth packs
+    for healthPack in healthPackList:
+        healthPack.drawUpdate(gameDisplay)
+    
+    #update ammo packs
+    for ammoPack in ammoPackList:
+        ammoPack.drawUpdate(gameDisplay)
+    
     #update the player
-    player.update()
+    player.update(healthPackList,ammoPackList)
     if player.drawUpdate(gameDisplay):
         print "_________________________________________GG WP_________________________________________"
         print "Monsters killed : " + str(level-len(monsterList))
         print "\n\n\n\n\n\n\n\n"
         break
-         
+    
+    #display level
+    gameDisplay.blit(text,[120,0,0,Layout.TOPOFFSET])    
+    
     #another way to draw rectangle
     #gameDisplay.fill(RED, rect=[200,200,50,50])
-    
+    #Using Mouse to Move
+    (mouseX, mouseY) = pygame.mouse.get_pos()
+    gameDisplay.blit(cursorImage,[mouseX-Layout.MOUSEDIMENSIONS/2,mouseY-Layout.MOUSEDIMENSIONS/2,Layout.MOUSEDIMENSIONS,Layout.MOUSEDIMENSIONS])
     pygame.display.update()
 
     #frames per sec, try to avoid changing this in code, keep it as a const

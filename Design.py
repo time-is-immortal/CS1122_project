@@ -16,8 +16,9 @@ class Layout:
     SCREEN_HEIGHT = 600
     BORDEROFFSET = 5
     TOPOFFSET = 25
-    HEALTHBARWIDTH = 700
+    HEALTHBARWIDTH = SCREEN_WIDTH/2
     AMMOTEXTPADDING = 10
+    MOUSEDIMENSIONS = 30
 
 #define game images
 class GameImages:
@@ -34,7 +35,26 @@ class MoveConstants:
     RIGHT = 3
     
 class PlayerConstants:
-    AMMOLIMIT = 30
-    MAXHEALTH = 10
+    AMMOLIMIT = 999
+    MAXHEALTH = 20
     PLAYERWIDTH = 50
     PLAYERHEIGHT = 50
+    MOVE = 5
+    
+class MonsterConstants:
+    MONSTERLEVEL = [.25,3,5,10,20]
+    #health,width,height,delay timer,move rate
+    MONSTERSTATS = [(2,50,50,7,4),(4,100,100,7,7),(10,250,250,15,3),(6,25,25,3,2),(10,300,300,50,2)]
+    SPAWNDELAY = -30
+    
+class PickupConstants:
+    HEIGHT = 20
+    WIDTH = 20
+    RATESPAWN = .1
+    RATERESTORE = 10
+    
+#collision between two rectangles 
+def CHECKRECT(X,Y,Width,Height,otherX,otherY,otherWidth,otherHeight):
+    if abs(otherX - X) <= Width/2 + otherWidth/2 and abs(otherY - Y) <= Height/2 + otherHeight/2:
+        return True
+    return False

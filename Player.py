@@ -8,9 +8,9 @@ class User:
     #constructor
     def __init__(self):
         #ammo
-        self.ammo = 20
+        self.ammo = PlayerConstants.AMMOLIMIT
         #health
-        self.currentHealth = 10
+        self.currentHealth = PlayerConstants.MAXHEALTH
         #spawn location 
         self.playerX = 300
         self.playerY = 300
@@ -57,21 +57,27 @@ class User:
         self.pUp = False
     def downFalse(self):
         self.pDown = False
-
-
     #update
     #update player position
-    def update(self):
+    def update(self,healthPackList,ammoPackList):
+        #checks contact
+        for healthPack in healthPackList:
+            if CHECKRECT(self.playerX,self.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT,healthPack.x_coord,healthPack.y_coord,PickupConstants.WIDTH,PickupConstants.HEIGHT):
+                healthPack.getPickedUp(self,healthPackList)
+        #checks contact        
+        for ammoPack in ammoPackList:
+            if CHECKRECT(self.playerX,self.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT,ammoPack.x_coord,ammoPack.y_coord,PickupConstants.WIDTH,PickupConstants.HEIGHT):
+                ammoPack.getPickedUp(self,ammoPackList)       
         if self.pLeft == True:
-            self.PlayerXChange = -5
+            self.PlayerXChange = -PlayerConstants.MOVE
         elif self.pRight is True:
-            self.PlayerXChange = 5
+            self.PlayerXChange = PlayerConstants.MOVE
         else:
             self.PlayerXChange = 0
         if self.pUp is True:
-            self.PlayerYChange = -5
+            self.PlayerYChange = -PlayerConstants.MOVE
         elif self.pDown is True:
-            self.PlayerYChange = 5
+            self.PlayerYChange = PlayerConstants.MOVE
         else:
             self.PlayerYChange = 0 
         #CHECKS THE BORDER BOUNDARIES  
@@ -97,7 +103,6 @@ class User:
                 angle = 135-math.degrees(math.atan2(*offset))
                 #angle = 0 #placeholder
                 playerBullet = Bullet(self.playerX, self.playerY, angle)
-                
             #state is 1 use space key
             elif state == 1:
                 if self.currentFace == MoveConstants.UP:
@@ -110,9 +115,12 @@ class User:
                     playerBullet = Bullet(self.playerX, self.playerY, 135)
             self.bulletList.append(playerBullet)
             self.ammo -= 1
+   
     def loseHealth(self,num):
-        self.currentHealth -= num;
-    
+        self.currentHealth -= num
+        if self.currentHealth < 0:
+            self.currentHealth = 0
+            
     def reloadImage(self):
         if self.currentFace != self.newFace:
             self.image = pygame.transform.scale(pygame.image.load(GameImages.PLAYERIMAGE[self.newFace]).convert_alpha(),(PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT))
