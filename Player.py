@@ -3,6 +3,7 @@ from Bullet import Bullet
 import math
 from Design import *
 
+pygame.mixer.init()
 class User:
 
     #constructor
@@ -115,6 +116,9 @@ class User:
                     playerBullet = Bullet(self.playerX, self.playerY, 135)
             self.bulletList.append(playerBullet)
             self.ammo -= 1
+            sound = pygame.mixer.Sound(Sounds.SHOOTSOUND)
+            sound.play()
+            
    
     def loseHealth(self,num):
         self.currentHealth -= num
