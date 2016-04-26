@@ -7,6 +7,7 @@ from Pickups import *
 #will initialize all modules
 #have to have it
 pygame.init()
+pygame.mixer.init()
 
 #need to make a canvas
 #requires a tuple (aka the size of windows)
