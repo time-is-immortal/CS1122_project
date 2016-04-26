@@ -65,10 +65,14 @@ class User:
         for healthPack in healthPackList:
             if CHECKRECT(self.playerX,self.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT,healthPack.x_coord,healthPack.y_coord,PickupConstants.WIDTH,PickupConstants.HEIGHT):
                 healthPack.getPickedUp(self,healthPackList)
+                sound = pygame.mixer.Sound(Sounds.PICKUPSOUND)
+                sound.play()
         #checks contact        
         for ammoPack in ammoPackList:
             if CHECKRECT(self.playerX,self.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT,ammoPack.x_coord,ammoPack.y_coord,PickupConstants.WIDTH,PickupConstants.HEIGHT):
-                ammoPack.getPickedUp(self,ammoPackList)       
+                ammoPack.getPickedUp(self,ammoPackList)   
+                sound = pygame.mixer.Sound(Sounds.PICKUPSOUND)
+                sound.play()
         if self.pLeft == True:
             self.PlayerXChange = -PlayerConstants.MOVE
         elif self.pRight is True:
@@ -122,6 +126,8 @@ class User:
    
     def loseHealth(self,num):
         self.currentHealth -= num
+        sound = pygame.mixer.Sound(Sounds.HITSOUND)
+        sound.play()
         if self.currentHealth < 0:
             self.currentHealth = 0
             
