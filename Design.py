@@ -27,6 +27,9 @@ class GameImages:
     HEALTHIMAGE = "static/pickup_Health.png"
     AMMOIMAGE = "static/pickup_Ammo.png"
 
+class Sounds:
+    SHOOTSOUNT = "audio/shootSound.wav"
+
 #constants for movements
 class MoveConstants:
     UP = 0
