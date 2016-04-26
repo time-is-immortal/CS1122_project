@@ -22,7 +22,7 @@ class Layout:
 
 #define game images
 class GameImages:
-    PLAYERIMAGE = ["static/playerUp.png","static/playerDown.png","static/playerLeft.png","static/playerRight.png"]
+    PLAYERIMAGE = ["static/player-up.png","static/player-down.png","static/player-left.png","static/player-right.png"]
     MONSTERIMAGE = "static/virus.png"
     HEALTHIMAGE = "static/pickup_Health.png"
     AMMOIMAGE = "static/pickup_Ammo.png"
