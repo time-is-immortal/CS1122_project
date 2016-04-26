@@ -29,6 +29,8 @@ class GameImages:
 
 class Sounds:
     SHOOTSOUND = "audio/shootSound.wav"
+    HITSOUND = "audio/hitSound.wav"
+    PICKUPSOUND = "audio/pickupSound.wav"
 
 #constants for movements
 class MoveConstants:
