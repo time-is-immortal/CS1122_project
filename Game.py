@@ -1,8 +1,10 @@
 import pygame
-from Player import User
+import random
 from Design import *
 from Monster import AMonster
+from Player import User
 from Pickups import *
+
 
 #will initialize all modules
 #have to have it
@@ -16,7 +18,7 @@ pygame.display.set_caption('BestNameEver!')
 gameExit = False
 
 #current level
-level = 1
+level = 0
 
 #time for frames per sec
 clock = pygame.time.Clock()
@@ -35,8 +37,7 @@ healthPackList = []
 ammoPackList = []
 
 #display level
-font = pygame.font.SysFont("comicsansms", 20)
-text = font.render("Level:" + str(level), True, Color.BLACK)
+font = pygame.font.SysFont("comicsansms", 16)
 
 #spawn monsters
 def spawnMonsters():
@@ -46,8 +47,8 @@ def spawnMonsters():
         for j in range(int(value/MonsterConstants.MONSTERLEVEL[i])):
             monsterList.append(AMonster(monsterList,player,i))
         value %= MonsterConstants.MONSTERLEVEL[i]
-    text = font.render("Level:" + str(level), True, Color.BLACK)
-    
+    ammoPackList.append(AmmoPickUp(random.randint(PickupConstants.WIDTH/2+Layout.BORDEROFFSET,Layout.SCREEN_WIDTH-Layout.BORDEROFFSET-PickupConstants.WIDTH/2),random.randint(PickupConstants.HEIGHT/2+Layout.TOPOFFSET,Layout.SCREEN_HEIGHT-Layout.BORDEROFFSET-PickupConstants.HEIGHT/2)))
+
 mouseX = 0
 mouseY = 0
 
@@ -58,13 +59,15 @@ shoot = True
 pygame.mouse.set_visible(False)
 
 #cursor image
-cursorImage = pygame.transform.scale(pygame.image.load(GameImages.MONSTERIMAGE).convert_alpha(),(Layout.MOUSEDIMENSIONS,Layout.MOUSEDIMENSIONS))
+cursorImage = pygame.transform.scale(pygame.image.load(GameImages.CURSORIMAGE).convert_alpha(),(Layout.MOUSEDIMENSIONS,Layout.MOUSEDIMENSIONS))
+#background image
+backGroundImage = pygame.transform.scale(pygame.image.load(GameImages.BACKGROUNDIMAGE).convert_alpha(),(Layout.SCREEN_WIDTH,Layout.SCREEN_HEIGHT))
 
 while not gameExit:
     #no monsters left
     if len(monsterList) == 0:
-        spawnMonsters()
         level+=1
+        spawnMonsters()
         
     #they take care of event handling
     #i.e. if arrow key is pressed, space bar is pressed
@@ -110,7 +113,8 @@ while not gameExit:
 
     #make the color of the screen
     #will always be first
-    gameDisplay.fill(Color.ANTIQUEWHITE)
+    #gameDisplay.fill(Color.ANTIQUEWHITE)
+    gameDisplay.blit(backGroundImage,[0,0,Layout.SCREEN_WIDTH,Layout.SCREEN_HEIGHT])
     
     #update monsters
     for aMonster in monsterList:
@@ -130,12 +134,17 @@ while not gameExit:
     player.update(healthPackList,ammoPackList)
     if player.drawUpdate(gameDisplay):
         print "_________________________________________GG WP_________________________________________"
-        print "Monsters killed : " + str(level-len(monsterList))
+        print "Level: " + str(level)
+        print "Monsters killed : " + str(player.killCount)
         print "\n\n\n\n\n\n\n\n"
         break
     
     #display level
-    gameDisplay.blit(text,[120,0,0,Layout.TOPOFFSET])    
+    if player.ammo > 0:
+       text = font.render(" Level:"+str(level)+" Ammo:"+str(player.ammo)+" ",True,Color.ANTIQUEWHITE,Color.GREY)
+    else:   
+        text = font.render(" Level:"+str(level)+" No Ammo"+" ",True,Color.RED,Color.GREY)
+    gameDisplay.blit(text,[10,0,0,Layout.TOPOFFSET]) 
     
     #another way to draw rectangle
     #gameDisplay.fill(RED, rect=[200,200,50,50])

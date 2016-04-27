@@ -1,12 +1,14 @@
 import pygame
 import random
-from Design import *
 import thread
 import time
+from Design import *
 from Pickups import *
+
 class AMonster:
     #constructor
     def __init__(self,monsterList,player,monsterLevel):
+        self.monsterLevel = monsterLevel
         #health
         self.maxHealth = self.currentHealth = MonsterConstants.MONSTERSTATS[monsterLevel][0]
         #dimensions
@@ -43,7 +45,7 @@ class AMonster:
         self.state = False
         time.sleep(.25)
         monsterList.remove(self)   
-    
+        
     #update monster position
     def update(self,monsterList,player,gameDisplay,healthPackList,ammoPackList):
         if not self.state:
@@ -51,10 +53,11 @@ class AMonster:
         if self.currentHealth <= 0:
             # The monster is dead.
             monsterList.remove(self)
+            player.killCount+=1
             spawnRate = random.random()
-            if spawnRate < PickupConstants.RATESPAWN:
+            if spawnRate < PickupConstants.RATESPAWN*(self.monsterLevel+1):
                 healthPackList.append(HealthPickUp(self.monsterX,self.monsterY))
-            elif spawnRate > 1-PickupConstants.RATESPAWN:
+            elif spawnRate > 1-PickupConstants.RATESPAWN*(self.monsterLevel+1):
                 ammoPackList.append(AmmoPickUp(self.monsterX,self.monsterY))
             return False
         if self.delay == self.delayTimer:
@@ -82,6 +85,7 @@ class AMonster:
         if CHECKRECT(self.monsterX,self.monsterY,self.monsterWidth,self.monsterHeight,player.playerX,player.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT): 
             # The monster is dead.
             player.loseHealth(self.currentHealth)
+            player.killCount+=1
             try:
                 thread.start_new_thread(self.flash_Monster,(monsterList,))
             except:

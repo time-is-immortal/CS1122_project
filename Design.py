@@ -9,7 +9,7 @@ class Color:
     BLUE = (0,0,255)
     GRAYISH = (192,192,192)
     ANTIQUEWHITE = (250,235,215)
-   
+    GREY = (68,68,68)
 #define borders
 class Layout:
     SCREEN_WIDTH = 800
@@ -26,7 +26,14 @@ class GameImages:
     MONSTERIMAGE = "static/virus.png"
     HEALTHIMAGE = "static/pickup_Health.png"
     AMMOIMAGE = "static/pickup_Ammo.png"
-
+    BACKGROUNDIMAGE = "static/back.png"
+    CURSORIMAGE = "static/playerDown.png"
+   
+class Sounds:
+    SHOOTSOUND = "static/shootSound.wav"
+    HITSOUND = "static/hitSound.wav"
+    PICKUPSOUND = "static/pickupSound.wav"
+    
 #constants for movements
 class MoveConstants:
     UP = 0
@@ -35,7 +42,7 @@ class MoveConstants:
     RIGHT = 3
     
 class PlayerConstants:
-    AMMOLIMIT = 999
+    AMMOLIMIT = 100
     MAXHEALTH = 20
     PLAYERWIDTH = 50
     PLAYERHEIGHT = 50
@@ -51,7 +58,8 @@ class PickupConstants:
     HEIGHT = 20
     WIDTH = 20
     RATESPAWN = .1
-    RATERESTORE = 10
+    HEALTHRESTORE = 5
+    AMMORESTORE = 10
     
 #collision between two rectangles 
 def CHECKRECT(X,Y,Width,Height,otherX,otherY,otherWidth,otherHeight):
