@@ -45,9 +45,13 @@ class AMonster:
         self.state = False
         time.sleep(.25)
         monsterList.remove(self)   
-        
+    
+    def explode(self, monsterList):
+        # The monster got blown up by a bomb.
+        thread.start_new_thread(self.flash_Monster,(monsterList,))
+    
     #update monster position
-    def update(self,monsterList,player,gameDisplay,healthPackList,ammoPackList):
+    def update(self,monsterList,player,gameDisplay,healthPackList,ammoPackList,hiddenBombList):
         if not self.state:
             return True
         if self.currentHealth <= 0:
@@ -81,6 +85,10 @@ class AMonster:
                 self.monsterY = Layout.SCREEN_HEIGHT-self.monsterHeight/2-Layout.BORDEROFFSET
             elif self.monsterY < self.monsterHeight/2+Layout.TOPOFFSET:
                 self.monsterY = self.monsterHeight/2+Layout.TOPOFFSET
+        #checks if collides with bomb
+        for bomb in hiddenBombList:
+            if bomb.checkCollisionsWithMonster(self):
+                self.explode(monsterList)
         #checks if collides with player
         if CHECKRECT(self.monsterX,self.monsterY,self.monsterWidth,self.monsterHeight,player.playerX,player.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT): 
             # The monster is dead.

@@ -4,7 +4,7 @@ from Design import *
 from Monster import AMonster
 from Player import User
 from Pickups import *
-
+from Bomb import HiddenBomb
 
 #will initialize all modules
 #have to have it
@@ -36,6 +36,9 @@ healthPackList = []
 #list of ammo packs
 ammoPackList = []
 
+#list of hidden bombs
+hiddenBombList = []
+
 #display level
 font = pygame.font.SysFont("comicsansms", 16)
 
@@ -49,6 +52,13 @@ def spawnMonsters():
         value %= MonsterConstants.MONSTERLEVEL[i]
     ammoPackList.append(AmmoPickUp(random.randint(PickupConstants.WIDTH/2+Layout.BORDEROFFSET,Layout.SCREEN_WIDTH-Layout.BORDEROFFSET-PickupConstants.WIDTH/2),random.randint(PickupConstants.HEIGHT/2+Layout.TOPOFFSET,Layout.SCREEN_HEIGHT-Layout.BORDEROFFSET-PickupConstants.HEIGHT/2)))
 
+#create hidden bombs
+def createHiddenBombs(howmany):
+    del hiddenBombList[:]
+    for i in range(0, howmany):
+        hiddenBombList.append(HiddenBomb(player))
+
+#mouse
 mouseX = 0
 mouseY = 0
 
@@ -68,7 +78,9 @@ while not gameExit:
     if len(monsterList) == 0:
         level+=1
         spawnMonsters()
-        
+        if level >= BombConstants.MINLEVEL:
+            createHiddenBombs(1) # Just one bomb for now
+    
     #they take care of event handling
     #i.e. if arrow key is pressed, space bar is pressed
     for event in pygame.event.get():
@@ -119,7 +131,7 @@ while not gameExit:
     #update monsters
     for aMonster in monsterList:
         aMonster.checkBulletHitList(player.bulletList)
-        if aMonster.update(monsterList,player,gameDisplay,healthPackList,ammoPackList):
+        if aMonster.update(monsterList,player,gameDisplay,healthPackList,ammoPackList,hiddenBombList):
             aMonster.drawUpdate(gameDisplay)
     
     #update heealth packs
@@ -131,8 +143,8 @@ while not gameExit:
         ammoPack.drawUpdate(gameDisplay)
     
     #update the player
-    player.update(healthPackList,ammoPackList)
-    if player.drawUpdate(gameDisplay):
+    player.update(healthPackList,ammoPackList,hiddenBombList)
+    if player.drawUpdate(gameDisplay, framesPerSec):
         print "_________________________________________GG WP_________________________________________"
         print "Level: " + str(level)
         print "Monsters killed : " + str(player.killCount)

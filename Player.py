@@ -1,5 +1,6 @@
 import pygame
 import math
+import random
 from Design import *
 from Bullet import Bullet
 
@@ -12,6 +13,9 @@ class User:
         self.ammo = PlayerConstants.AMMOLIMIT
         #health
         self.currentHealth = PlayerConstants.MAXHEALTH
+        #bombs
+        self.bombBeepHz = 0
+        self.bombBeepDelay = 0
         #spawn location 
         self.playerX = 300
         self.playerY = 300
@@ -58,7 +62,7 @@ class User:
         self.pDown = False
     #update
     #update player position
-    def update(self,healthPackList,ammoPackList):
+    def update(self,healthPackList,ammoPackList,hiddenBombList):
         #checks contact
         for healthPack in healthPackList:
             if CHECKRECT(self.playerX,self.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT,healthPack.x_coord,healthPack.y_coord,PickupConstants.WIDTH,PickupConstants.HEIGHT):
@@ -67,6 +71,14 @@ class User:
         for ammoPack in ammoPackList:
             if CHECKRECT(self.playerX,self.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT,ammoPack.x_coord,ammoPack.y_coord,PickupConstants.WIDTH,PickupConstants.HEIGHT):
                 ammoPack.getPickedUp(self,ammoPackList)       
+        #checks contact with bomb
+        bombDistanceSum = 0
+        for bomb in hiddenBombList:
+            if not bomb.detonated:
+                bombDistanceSum += bomb.distanceToPlayer(self)
+                if bomb.checkCollisionsWithPlayer(self):
+                    self.explode()
+        self.bombBeepHz = bombDistanceSum / BombConstants.BEEPRADIUS * BombConstants.BEEPHERTZMAX
         if self.pLeft == True:
             self.PlayerXChange = -PlayerConstants.MOVE
         elif self.pRight is True:
@@ -126,14 +138,18 @@ class User:
         self.currentHealth -= num
         if self.currentHealth < 0:
             self.currentHealth = 0
-            
+    
+    def explode(self):
+        # The player got blown up by a bomb.
+        self.loseHealth(3)
+    
     def reloadImage(self):
         if self.currentFace != self.newFace:
             self.image = pygame.transform.scale(pygame.image.load(GameImages.PLAYERIMAGE[self.newFace]).convert_alpha(),(PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT))
             self.currentFace = self.newFace
         return self.image    
         
-    def drawUpdate(self, gameDisplay):
+    def drawUpdate(self, gameDisplay, framesPerSec):
         if self.currentHealth <= 0:
             return True
         #player display
@@ -145,4 +161,12 @@ class User:
                 del self.bulletList[index]
             else:
                 bullet.drawUpdate(gameDisplay)
+        #play sound for bomb beep
+        if self.bombBeepHz >= BombConstants.BEEPHERTZMIN:
+            if self.bombBeepDelay >= framesPerSec / self.bombBeepHz:
+                self.bombBeepDelay = 0
+                # Play a sound
+                print(' ' * random.randint(0, 8) + "Beep") # TODO: Get an actual WAV file
+            else:
+                self.bombBeepDelay += 1
         return False   
