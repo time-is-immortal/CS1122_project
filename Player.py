@@ -44,16 +44,13 @@ class User:
     #player moves in direction of key
     def leftTrue(self):
         self.pLeft = True
-        self.newFace = MoveConstants.LEFT
     def rightTrue(self):
         self.pRight = True
-        self.newFace = MoveConstants.RIGHT
     def upTrue(self):
         self.pUp = True
-        self.newFace = MoveConstants.UP
     def downTrue(self):
         self.pDown = True
-        self.newFace = MoveConstants.DOWN
+        
     #no moving
     #in direction you let go
     def leftFalse(self):
@@ -67,7 +64,7 @@ class User:
     #update
     #update player position
     def update(self,healthPackList,ammoPackList,hiddenBombList,explosionAnimationList):
-        self.checkDiagonal()
+        self.checkDirection()
         #checks contact
         for healthPack in healthPackList:
             if CHECKRECT(self.playerX,self.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT,healthPack.x_coord,healthPack.y_coord,PickupConstants.WIDTH,PickupConstants.HEIGHT):
@@ -151,7 +148,27 @@ class User:
         # The player got blown up by a bomb.
         self.loseHealth(3)
     
-    def checkDiagonal(self):
+##    def checkDiagonal(self):
+##        if (self.pRight == True and self.pUp == True):
+##            self.newFace = MoveConstants.UPRIGHT
+##        elif (self.pRight == True and self.pDown == True):
+##            self.newFace = MoveConstants.DOWNRIGHT
+##        elif (self.pLeft == True and self.pUp == True):
+##            self.newFace = MoveConstants.UPLEFT
+##        elif (self.pLeft == True and self.pDown == True):
+##            self.newFace = MoveConstants.DOWNLEFT
+
+    def checkDirection(self):
+        #caridinals
+        if (self.pLeft == True):
+            self.newFace = MoveConstants.LEFT
+        elif (self.pRight == True):
+            self.newFace = MoveConstants.RIGHT
+        elif (self.pUp == True):
+            self.newFace = MoveConstants.UP
+        elif (self.pDown == True):
+            self.newFace = MoveConstants.DOWN
+        #diagonals
         if (self.pRight == True and self.pUp == True):
             self.newFace = MoveConstants.UPRIGHT
         elif (self.pRight == True and self.pDown == True):
