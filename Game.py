@@ -1,13 +1,14 @@
 import pygame
-from Player import User
+import random
 from Design import *
 from Monster import AMonster
+from Player import User
 from Pickups import *
+from Bomb import HiddenBomb
 
 #will initialize all modules
 #have to have it
 pygame.init()
-pygame.mixer.init()
 
 #need to make a canvas
 #requires a tuple (aka the size of windows)
@@ -17,7 +18,7 @@ pygame.display.set_caption('BestNameEver!')
 gameExit = False
 
 #current level
-level = 1
+level = 0
 
 #time for frames per sec
 clock = pygame.time.Clock()
@@ -35,9 +36,12 @@ healthPackList = []
 #list of ammo packs
 ammoPackList = []
 
+#list of hidden bombs
+hiddenBombList = []
+explosionAnimationList = []
+
 #display level
-font = pygame.font.SysFont("comicsansms", 20)
-text = font.render("Level:" + str(level), True, Color.BLACK)
+font = pygame.font.SysFont("comicsansms", 16)
 
 #spawn monsters
 def spawnMonsters():
@@ -47,8 +51,15 @@ def spawnMonsters():
         for j in range(int(value/MonsterConstants.MONSTERLEVEL[i])):
             monsterList.append(AMonster(monsterList,player,i))
         value %= MonsterConstants.MONSTERLEVEL[i]
-    text = font.render("Level:" + str(level), True, Color.BLACK)
-    
+    ammoPackList.append(AmmoPickUp(random.randint(PickupConstants.WIDTH/2+Layout.BORDEROFFSET,Layout.SCREEN_WIDTH-Layout.BORDEROFFSET-PickupConstants.WIDTH/2),random.randint(PickupConstants.HEIGHT/2+Layout.TOPOFFSET,Layout.SCREEN_HEIGHT-Layout.BORDEROFFSET-PickupConstants.HEIGHT/2)))
+
+#create hidden bombs
+def createHiddenBombs(howmany):
+    del hiddenBombList[:]
+    for i in range(0, howmany):
+        hiddenBombList.append(HiddenBomb(player))
+
+#mouse
 mouseX = 0
 mouseY = 0
 
@@ -59,14 +70,18 @@ shoot = True
 pygame.mouse.set_visible(False)
 
 #cursor image
-cursorImage = pygame.transform.scale(pygame.image.load(GameImages.MONSTERIMAGE).convert_alpha(),(Layout.MOUSEDIMENSIONS,Layout.MOUSEDIMENSIONS))
+cursorImage = pygame.transform.scale(pygame.image.load(GameImages.CURSORIMAGE).convert_alpha(),(Layout.MOUSEDIMENSIONS,Layout.MOUSEDIMENSIONS))
+#background image
+backGroundImage = pygame.transform.scale(pygame.image.load(GameImages.BACKGROUNDIMAGE).convert_alpha(),(Layout.SCREEN_WIDTH,Layout.SCREEN_HEIGHT))
 
 while not gameExit:
     #no monsters left
     if len(monsterList) == 0:
-        spawnMonsters()
         level+=1
-        
+        spawnMonsters()
+        if level >= BombConstants.MINLEVEL:
+            createHiddenBombs(1) # Just one bomb for now
+    
     #they take care of event handling
     #i.e. if arrow key is pressed, space bar is pressed
     for event in pygame.event.get():
@@ -111,12 +126,13 @@ while not gameExit:
 
     #make the color of the screen
     #will always be first
-    gameDisplay.fill(Color.ANTIQUEWHITE)
+    #gameDisplay.fill(Color.ANTIQUEWHITE)
+    gameDisplay.blit(backGroundImage,[0,0,Layout.SCREEN_WIDTH,Layout.SCREEN_HEIGHT])
     
     #update monsters
     for aMonster in monsterList:
         aMonster.checkBulletHitList(player.bulletList)
-        if aMonster.update(monsterList,player,gameDisplay,healthPackList,ammoPackList):
+        if aMonster.update(monsterList,player,gameDisplay,healthPackList,ammoPackList,hiddenBombList,explosionAnimationList):
             aMonster.drawUpdate(gameDisplay)
     
     #update heealth packs
@@ -127,16 +143,25 @@ while not gameExit:
     for ammoPack in ammoPackList:
         ammoPack.drawUpdate(gameDisplay)
     
+    #play explosion animations
+    for anim in explosionAnimationList:
+        anim.drawUpdate(gameDisplay, framesPerSec)
+    
     #update the player
-    player.update(healthPackList,ammoPackList)
-    if player.drawUpdate(gameDisplay):
+    player.update(healthPackList,ammoPackList,hiddenBombList,explosionAnimationList)
+    if player.drawUpdate(gameDisplay, framesPerSec):
         print "_________________________________________GG WP_________________________________________"
-        print "Monsters killed : " + str(level-len(monsterList))
+        print "Level: " + str(level)
+        print "Monsters killed : " + str(player.killCount)
         print "\n\n\n\n\n\n\n\n"
         break
     
     #display level
-    gameDisplay.blit(text,[120,0,0,Layout.TOPOFFSET])    
+    if player.ammo > 0:
+       text = font.render(" Level:"+str(level)+" Ammo:"+str(player.ammo)+" ",True,Color.ANTIQUEWHITE,Color.GREY)
+    else:   
+        text = font.render(" Level:"+str(level)+" No Ammo"+" ",True,Color.RED,Color.GREY)
+    gameDisplay.blit(text,[10,0,0,Layout.TOPOFFSET]) 
     
     #another way to draw rectangle
     #gameDisplay.fill(RED, rect=[200,200,50,50])
