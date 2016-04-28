@@ -1,4 +1,4 @@
-from Design import BombConstants, Layout
+from Design import BombConstants, Layout, Sounds
 import random
 import math
 import pygame
@@ -29,7 +29,7 @@ class HiddenBomb:
     
     def detonate(self, explosionAnimationList):
         self.detonated = True
-        print("BOOM!") # TODO: Get an actual WAV file
+        pygame.mixer.Sound(Sounds.EXPLOSIONSOUND).play()
         explosionAnimationList.append(ExplosionAnimation(self.x, self.y, BombConstants.EXPLOSION, BombConstants.EXPLOSION_SIZE, BombConstants.EXPLOSION_REGISTRATION, BombConstants.EXPLOSION_FPS))
           
     def checkCollisionsWithMonster(self, monster, explosionAnimationList):

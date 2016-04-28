@@ -143,10 +143,6 @@ while not gameExit:
     for ammoPack in ammoPackList:
         ammoPack.drawUpdate(gameDisplay)
     
-    #play explosion animations
-    for anim in explosionAnimationList:
-        anim.drawUpdate(gameDisplay, framesPerSec)
-    
     #update the player
     player.update(healthPackList,ammoPackList,hiddenBombList,explosionAnimationList)
     if player.drawUpdate(gameDisplay, framesPerSec):
@@ -155,6 +151,10 @@ while not gameExit:
         print "Monsters killed : " + str(player.killCount)
         print "\n\n\n\n\n\n\n\n"
         break
+    
+    #play explosion animations
+    for anim in explosionAnimationList:
+        anim.drawUpdate(gameDisplay, framesPerSec)
     
     #display level
     if player.ammo > 0:

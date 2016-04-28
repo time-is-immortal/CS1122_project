@@ -16,6 +16,10 @@ class User:
         #bombs
         self.bombBeepHz = 0
         self.bombBeepDelay = 0
+        self.bombDistanceSum = 0
+        self.beepSounds = []
+        for path in BombConstants.BEEP_SOUNDS:
+            self.beepSounds.append(pygame.mixer.Sound(path))
         #spawn location 
         self.playerX = 300
         self.playerY = 300
@@ -73,13 +77,13 @@ class User:
             if CHECKRECT(self.playerX,self.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT,ammoPack.x_coord,ammoPack.y_coord,PickupConstants.WIDTH,PickupConstants.HEIGHT):
                 ammoPack.getPickedUp(self,ammoPackList)       
         #checks contact with bomb
-        bombDistanceSum = 0
+        self.bombDistanceSum = 0
         for bomb in hiddenBombList:
             if not bomb.detonated:
-                bombDistanceSum += bomb.distanceToPlayer(self)
+                self.bombDistanceSum += bomb.distanceToPlayer(self)
                 if bomb.checkCollisionsWithPlayer(self, explosionAnimationList):
                     self.explode()
-        self.bombBeepHz = (1 - bombDistanceSum / BombConstants.BEEPRADIUS) * BombConstants.BEEPHERTZMAX if bombDistanceSum > 0 else 0
+        self.bombBeepHz = (1 - self.bombDistanceSum / BombConstants.BEEPRADIUS) * BombConstants.BEEPHERTZMAX if self.bombDistanceSum > 0 else 0
         if self.pLeft == True:
             self.PlayerXChange = -PlayerConstants.MOVE
         elif self.pRight is True:
@@ -180,7 +184,10 @@ class User:
             if self.bombBeepDelay >= framesPerSec / self.bombBeepHz:
                 self.bombBeepDelay = 0
                 # Play a sound
-                print(self.bombBeepHz, ' ' * random.randint(0, 8) + "Beep") # TODO: Get an actual WAV file
+                #ping = BombConstants.BEEP_SOUNDS[int(min(self.bombDistanceSum / BombConstants.BEEPRADIUS * len(BombConstants.BEEP_SOUNDS), len(BombConstants.BEEP_SOUNDS) - 1))]
+                #print(ping)
+                #pygame.mixer.Sound(ping).play()
+                self.beepSounds[int(min(self.bombDistanceSum / BombConstants.BEEPRADIUS * len(BombConstants.BEEP_SOUNDS), len(BombConstants.BEEP_SOUNDS) - 1))].play()
             else:
                 self.bombBeepDelay += 1
         return False   

@@ -34,6 +34,7 @@ class Sounds:
     SHOOTSOUND = "static/shootSound.wav"
     HITSOUND = "static/hitSound.wav"
     PICKUPSOUND = "static/pickupSound.wav"
+    EXPLOSIONSOUND = "static/explosion/cydon.wav"
 
 #constants for movements
 class MoveConstants:
@@ -70,8 +71,15 @@ class BombConstants:
     TRIGGERRADIUS = 50 # pixels
     BEEPRADIUS = 500 # pixels
     MINLEVEL = 1 # do not plant bombs below this level
-    BEEPHERTZMAX = 8
+    BEEPHERTZMAX = 2
     BEEPHERTZMIN = 0.5
+    BEEP_SOUNDS = [
+        "static/explosion/sonar-1.wav",
+        "static/explosion/sonar-2.wav",
+        "static/explosion/sonar-3.wav",
+        "static/explosion/sonar-4.wav",
+        "static/explosion/sonar-5.wav"
+    ]
     EXPLOSION = [
         "static/explosion/explosion-09.png",
         "static/explosion/explosion-10.png",
