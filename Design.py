@@ -23,7 +23,8 @@ class Layout:
 
 #define game images
 class GameImages:
-    PLAYERIMAGE = ["static/player-up.png","static/player-down.png","static/player-left.png","static/player-right.png"]
+    PLAYERIMAGE = ["static/player-up.png","static/player-down.png","static/player-left.png","static/player-right.png",
+                   "static/player-upright.png", "static/player-upleft.png", "static/player-downright.png", "static/player-downleft.png"]
     MONSTERIMAGE = "static/virus.png"
     HEALTHIMAGE = "static/pickup_Health.png"
     AMMOIMAGE = "static/pickup_Ammo.png"
@@ -41,9 +42,13 @@ class MoveConstants:
     DOWN = 1
     LEFT = 2
     RIGHT = 3
+    UPRIGHT = 4
+    UPLEFT = 5
+    DOWNRIGHT = 6
+    DOWNLEFT = 7
 
 class PlayerConstants:
-    AMMOLIMIT = 100
+    AMMOLIMIT = 999
     MAXHEALTH = 20
     PLAYERWIDTH = 50
     PLAYERHEIGHT = 50
@@ -61,6 +66,7 @@ class PickupConstants:
     RATESPAWN = .1
     HEALTHRESTORE = 5
     AMMORESTORE = 10
+    RATERESTORE = 10
 
 class BombConstants:
     TRIGGERRADIUS = 50 # pixels

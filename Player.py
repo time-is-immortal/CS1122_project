@@ -32,6 +32,8 @@ class User:
         self.newFace = MoveConstants.UP
         self.currentFace = MoveConstants.UP
         self.bulletList = [] #list of bullets on screen, will iterate through to update their positions
+        #font
+        self.font = pygame.font.SysFont("comicsansms", 20)
         #represents the image
         self.image = pygame.transform.scale(pygame.image.load(GameImages.PLAYERIMAGE[self.currentFace]).convert_alpha(),(PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT))
         self.killCount = 0
@@ -67,10 +69,14 @@ class User:
         for healthPack in healthPackList:
             if CHECKRECT(self.playerX,self.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT,healthPack.x_coord,healthPack.y_coord,PickupConstants.WIDTH,PickupConstants.HEIGHT):
                 healthPack.getPickedUp(self,healthPackList)
+                sound = pygame.mixer.Sound(Sounds.PICKUPSOUND)
+                sound.play()
         #checks contact        
         for ammoPack in ammoPackList:
             if CHECKRECT(self.playerX,self.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT,ammoPack.x_coord,ammoPack.y_coord,PickupConstants.WIDTH,PickupConstants.HEIGHT):
                 ammoPack.getPickedUp(self,ammoPackList)       
+                sound = pygame.mixer.Sound(Sounds.PICKUPSOUND)
+                sound.play()
         #checks contact with bomb
         bombDistanceSum = 0
         for bomb in hiddenBombList:
@@ -118,20 +124,28 @@ class User:
                 self.ammo -= 1
             #state is 1 use space key
             elif state == 1:
-                # if self.currentFace == MoveConstants.UP:
-                    # playerBullet = Bullet(self.playerX, self.playerY, -135)
-                # elif self.currentFace == MoveConstants.DOWN:
-                    # playerBullet = Bullet(self.playerX, self.playerY, 45)
-                # elif self.currentFace == MoveConstants.LEFT:
-                    # playerBullet = Bullet(self.playerX, self.playerY, -45)
-                # elif self.currentFace == MoveConstants.RIGHT:
-                    # playerBullet = Bullet(self.playerX, self.playerY, 135)
-                self.bulletList.append(Bullet(self.playerX, self.playerY, -135))
-                self.bulletList.append(Bullet(self.playerX, self.playerY, 45))
-                self.bulletList.append(Bullet(self.playerX, self.playerY, -45))
-                self.bulletList.append(Bullet(self.playerX, self.playerY, 135))
-                self.ammo -= 4
-            pygame.mixer.Sound(Sounds.SHOOTSOUND).play()
+                if self.currentFace == MoveConstants.UP:
+                    playerBullet = Bullet(self.playerX, self.playerY, -135)
+                elif self.currentFace == MoveConstants.DOWN:
+                    playerBullet = Bullet(self.playerX, self.playerY, 45)
+                elif self.currentFace == MoveConstants.LEFT:
+                    playerBullet = Bullet(self.playerX, self.playerY, -45)
+                elif self.currentFace == MoveConstants.RIGHT:
+                    playerBullet = Bullet(self.playerX, self.playerY, 135)
+                elif self.currentFace == MoveConstants.UPRIGHT:
+                    playerBullet = Bullet(self.playerX, self.playerY, 180)
+                elif self.currentFace == MoveConstants.UPLEFT:
+                    playerBullet = Bullet(self.playerX, self.playerY, -90)
+                elif self.currentFace == MoveConstants.DOWNRIGHT:
+                    playerBullet = Bullet(self.playerX, self.playerY, 90)
+                elif self.currentFace == MoveConstants.DOWNLEFT:
+                    playerBullet = Bullet(self.playerX, self.playerY, 0)
+            
+            self.bulletList.append(playerBullet)
+            self.ammo -= 1
+            sound = pygame.mixer.Sound(Sounds.SHOOTSOUND)
+            sound.play()
+            
    
     def loseHealth(self,num):
         pygame.mixer.Sound(Sounds.HITSOUND).play()
@@ -142,7 +156,16 @@ class User:
     def explode(self):
         # The player got blown up by a bomb.
         self.loseHealth(3)
-    
+
+    def checkDiagonal(self):
+        if (self.pRight ==True and self.pUp == True):
+            self.newFace = MoveConstants.UPRIGHT
+        elif (self.pRight == True and self.pDown == True):
+            self.newFace = MoveConstants.DOWNRIGHT
+        elif (self.pLeft == True and self.pUp == True):
+            self.newFace = MoveConstants.UPLEFT
+        elif (self.pLeft == True and self.pDown == True):
+            self.newFace = MoveConstants.DOWNLEFT
     def reloadImage(self):
         if self.currentFace != self.newFace:
             self.image = pygame.transform.scale(pygame.image.load(GameImages.PLAYERIMAGE[self.newFace]).convert_alpha(),(PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT))
@@ -153,9 +176,16 @@ class User:
         if self.currentHealth <= 0:
             return True
         #player display
+        self.checkDiagonal()
         gameDisplay.blit(self.reloadImage(),[self.playerX - PlayerConstants.PLAYERWIDTH/2,self.playerY - PlayerConstants.PLAYERHEIGHT/2,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT])
         #health bar
         pygame.draw.rect(gameDisplay,Color.RED,[(Layout.SCREEN_WIDTH-Layout.HEALTHBARWIDTH)+Layout.HEALTHBARWIDTH*(1-self.currentHealth/float(PlayerConstants.MAXHEALTH)),0,Layout.SCREEN_WIDTH,Layout.TOPOFFSET-1])
+        #display ammo
+        if self.ammo > 0:
+            text = self.font.render("Ammo:" + str(self.ammo), True, Color.BLACK)
+        else:   
+            text = self.font.render("No Ammo", True, Color.RED)
+        gameDisplay.blit(text,[Layout.AMMOTEXTPADDING,0,0,Layout.TOPOFFSET])
         for index, bullet in enumerate(self.bulletList): #update every bullet on screen
             if bullet.isOffScreen:
                 del self.bulletList[index]

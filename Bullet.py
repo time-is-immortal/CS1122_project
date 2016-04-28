@@ -1,7 +1,8 @@
 import pygame
+from Design import *
 import math
 import random
-from Design import *
+
 
 class Bullet:
   def __init__(self, x_coord, y_coord, angle): #x and y coords should just be player's coords, since it is shot out of the player

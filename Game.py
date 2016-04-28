@@ -9,6 +9,7 @@ from Bomb import HiddenBomb
 #will initialize all modules
 #have to have it
 pygame.init()
+pygame.mixer.init()
 
 #need to make a canvas
 #requires a tuple (aka the size of windows)
@@ -18,7 +19,7 @@ pygame.display.set_caption('BestNameEver!')
 gameExit = False
 
 #current level
-level = 0
+level = 1
 
 #time for frames per sec
 clock = pygame.time.Clock()
@@ -41,7 +42,8 @@ hiddenBombList = []
 explosionAnimationList = []
 
 #display level
-font = pygame.font.SysFont("comicsansms", 16)
+font = pygame.font.SysFont("comicsansms", 20)
+text = font.render("Level:" + str(level), True, Color.BLACK)
 
 #spawn monsters
 def spawnMonsters():
@@ -52,6 +54,7 @@ def spawnMonsters():
             monsterList.append(AMonster(monsterList,player,i))
         value %= MonsterConstants.MONSTERLEVEL[i]
     ammoPackList.append(AmmoPickUp(random.randint(PickupConstants.WIDTH/2+Layout.BORDEROFFSET,Layout.SCREEN_WIDTH-Layout.BORDEROFFSET-PickupConstants.WIDTH/2),random.randint(PickupConstants.HEIGHT/2+Layout.TOPOFFSET,Layout.SCREEN_HEIGHT-Layout.BORDEROFFSET-PickupConstants.HEIGHT/2)))
+    text = font.render("Level:" + str(level), True, Color.BLACK)
 
 #create hidden bombs
 def createHiddenBombs(howmany):
@@ -71,6 +74,7 @@ pygame.mouse.set_visible(False)
 
 #cursor image
 cursorImage = pygame.transform.scale(pygame.image.load(GameImages.CURSORIMAGE).convert_alpha(),(Layout.MOUSEDIMENSIONS,Layout.MOUSEDIMENSIONS))
+
 #background image
 backGroundImage = pygame.transform.scale(pygame.image.load(GameImages.BACKGROUNDIMAGE).convert_alpha(),(Layout.SCREEN_WIDTH,Layout.SCREEN_HEIGHT))
 
