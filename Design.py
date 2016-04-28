@@ -68,6 +68,28 @@ class BombConstants:
     MINLEVEL = 1 # do not plant bombs below this level
     BEEPHERTZMAX = 8
     BEEPHERTZMIN = 0.5
+    EXPLOSION = [
+        "static/explosion/explosion-09.png",
+        "static/explosion/explosion-10.png",
+        "static/explosion/explosion-11.png",
+        "static/explosion/explosion-12.png",
+        "static/explosion/explosion-13.png",
+        "static/explosion/explosion-14.png",
+        "static/explosion/explosion-15.png",
+        "static/explosion/explosion-16.png",
+        "static/explosion/explosion-17.png",
+        "static/explosion/explosion-01.png",
+        "static/explosion/explosion-02.png",
+        "static/explosion/explosion-03.png",
+        "static/explosion/explosion-04.png",
+        "static/explosion/explosion-05.png",
+        "static/explosion/explosion-06.png",
+        "static/explosion/explosion-07.png",
+        "static/explosion/explosion-08.png"
+    ]
+    EXPLOSION_SIZE = (200, 200)
+    EXPLOSION_REGISTRATION = (97, 156)
+    EXPLOSION_FPS = 10
 
 #collision between two rectangles 
 def CHECKRECT(X,Y,Width,Height,otherX,otherY,otherWidth,otherHeight):

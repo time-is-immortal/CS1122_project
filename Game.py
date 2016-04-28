@@ -38,6 +38,7 @@ ammoPackList = []
 
 #list of hidden bombs
 hiddenBombList = []
+explosionAnimationList = []
 
 #display level
 font = pygame.font.SysFont("comicsansms", 16)
@@ -131,7 +132,7 @@ while not gameExit:
     #update monsters
     for aMonster in monsterList:
         aMonster.checkBulletHitList(player.bulletList)
-        if aMonster.update(monsterList,player,gameDisplay,healthPackList,ammoPackList,hiddenBombList):
+        if aMonster.update(monsterList,player,gameDisplay,healthPackList,ammoPackList,hiddenBombList,explosionAnimationList):
             aMonster.drawUpdate(gameDisplay)
     
     #update heealth packs
@@ -143,13 +144,17 @@ while not gameExit:
         ammoPack.drawUpdate(gameDisplay)
     
     #update the player
-    player.update(healthPackList,ammoPackList,hiddenBombList)
+    player.update(healthPackList,ammoPackList,hiddenBombList,explosionAnimationList)
     if player.drawUpdate(gameDisplay, framesPerSec):
         print "_________________________________________GG WP_________________________________________"
         print "Level: " + str(level)
         print "Monsters killed : " + str(player.killCount)
         print "\n\n\n\n\n\n\n\n"
         break
+    
+    #play explosion animations
+    for anim in explosionAnimationList:
+        anim.drawUpdate(gameDisplay, framesPerSec)
     
     #display level
     if player.ammo > 0:
@@ -164,7 +169,7 @@ while not gameExit:
     (mouseX, mouseY) = pygame.mouse.get_pos()
     gameDisplay.blit(cursorImage,[mouseX-Layout.MOUSEDIMENSIONS/2,mouseY-Layout.MOUSEDIMENSIONS/2,Layout.MOUSEDIMENSIONS,Layout.MOUSEDIMENSIONS])
     pygame.display.update()
-
+    
     #frames per sec, try to avoid changing this in code, keep it as a const
     clock.tick(framesPerSec) 
 

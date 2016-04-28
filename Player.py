@@ -62,7 +62,7 @@ class User:
         self.pDown = False
     #update
     #update player position
-    def update(self,healthPackList,ammoPackList,hiddenBombList):
+    def update(self,healthPackList,ammoPackList,hiddenBombList,explosionAnimationList):
         #checks contact
         for healthPack in healthPackList:
             if CHECKRECT(self.playerX,self.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT,healthPack.x_coord,healthPack.y_coord,PickupConstants.WIDTH,PickupConstants.HEIGHT):
@@ -76,9 +76,9 @@ class User:
         for bomb in hiddenBombList:
             if not bomb.detonated:
                 bombDistanceSum += bomb.distanceToPlayer(self)
-                if bomb.checkCollisionsWithPlayer(self):
+                if bomb.checkCollisionsWithPlayer(self, explosionAnimationList):
                     self.explode()
-        self.bombBeepHz = bombDistanceSum / BombConstants.BEEPRADIUS * BombConstants.BEEPHERTZMAX
+        self.bombBeepHz = (1 - bombDistanceSum / BombConstants.BEEPRADIUS) * BombConstants.BEEPHERTZMAX if bombDistanceSum > 0 else 0
         if self.pLeft == True:
             self.PlayerXChange = -PlayerConstants.MOVE
         elif self.pRight is True:
@@ -166,7 +166,7 @@ class User:
             if self.bombBeepDelay >= framesPerSec / self.bombBeepHz:
                 self.bombBeepDelay = 0
                 # Play a sound
-                print(' ' * random.randint(0, 8) + "Beep") # TODO: Get an actual WAV file
+                print(self.bombBeepHz, ' ' * random.randint(0, 8) + "Beep") # TODO: Get an actual WAV file
             else:
                 self.bombBeepDelay += 1
         return False   
