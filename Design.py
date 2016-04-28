@@ -28,7 +28,7 @@ class GameImages:
     HEALTHIMAGE = "static/pickup_Health.png"
     AMMOIMAGE = "static/pickup_Ammo.png"
     BACKGROUNDIMAGE = "static/back.png"
-    CURSORIMAGE = "static/playerDown.png"
+    CURSORIMAGE = "static/pointer.png"
 
 class Sounds:
     SHOOTSOUND = "static/shootSound.wav"
