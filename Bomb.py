@@ -44,7 +44,7 @@ class HiddenBomb:
         if self.detonated:
             return False
         if self.distanceToPlayer(player) < BombConstants.TRIGGERRADIUS:
-            self.detonate()
+            self.detonate(explosionAnimationList)
             return True
         return False
         
