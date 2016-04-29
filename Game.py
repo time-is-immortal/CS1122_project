@@ -16,6 +16,8 @@ gameDisplay = pygame.display.set_mode((Layout.SCREEN_WIDTH,Layout.SCREEN_HEIGHT)
 pygame.display.set_caption('BestNameEver!')
 
 gameExit = False
+tutorial = True
+startText = True
 
 #current level
 level = 0
@@ -45,13 +47,16 @@ font = pygame.font.SysFont("comicsansms", 16)
 
 #spawn monsters
 def spawnMonsters():
-    #insert monsters
-    value = level
-    for i in reversed(range(len(MonsterConstants.MONSTERLEVEL))):
-        for j in range(int(value/MonsterConstants.MONSTERLEVEL[i])):
-            monsterList.append(AMonster(monsterList,player,i))
-        value %= MonsterConstants.MONSTERLEVEL[i]
-    ammoPackList.append(AmmoPickUp(random.randint(PickupConstants.WIDTH/2+Layout.BORDEROFFSET,Layout.SCREEN_WIDTH-Layout.BORDEROFFSET-PickupConstants.WIDTH/2),random.randint(PickupConstants.HEIGHT/2+Layout.TOPOFFSET,Layout.SCREEN_HEIGHT-Layout.BORDEROFFSET-PickupConstants.HEIGHT/2)))
+    if tutorial == True:
+        monsterList.append(AMonster(monsterList,player,1))
+    else:
+        #insert monsters
+        value = level
+        for i in reversed(range(len(MonsterConstants.MONSTERLEVEL))):
+            for j in range(int(value/MonsterConstants.MONSTERLEVEL[i])):
+                monsterList.append(AMonster(monsterList,player,i))
+            value %= MonsterConstants.MONSTERLEVEL[i]
+        ammoPackList.append(AmmoPickUp(random.randint(PickupConstants.WIDTH/2+Layout.BORDEROFFSET,Layout.SCREEN_WIDTH-Layout.BORDEROFFSET-PickupConstants.WIDTH/2),random.randint(PickupConstants.HEIGHT/2+Layout.TOPOFFSET,Layout.SCREEN_HEIGHT-Layout.BORDEROFFSET-PickupConstants.HEIGHT/2)))
 
 #create hidden bombs
 def createHiddenBombs(howmany):
@@ -74,14 +79,24 @@ cursorImage = pygame.transform.scale(pygame.image.load(GameImages.CURSORIMAGE).c
 #background image
 backGroundImage = pygame.transform.scale(pygame.image.load(GameImages.BACKGROUNDIMAGE).convert_alpha(),(Layout.SCREEN_WIDTH,Layout.SCREEN_HEIGHT))
 
+def playerRules():
+    text = font.render(" Use AWSD or ARROW Keys to move. \n You can shoot with the spacebar or the mouse. Toggle between the two by pressing R.",1, Color.WHITE)
+    gameDisplay.blit(text,[100,100,100,Layout.TOPOFFSET]) 
+          
+        
 while not gameExit:
+    
+    #make monster(s)
     #no monsters left
     if len(monsterList) == 0:
         level+=1
         spawnMonsters()
-        if level >= BombConstants.MINLEVEL:
-            createHiddenBombs(1) # Just one bomb for now
+        if not tutorial:
+            if level >= BombConstants.MINLEVEL:
+                createHiddenBombs(1) # Just one bomb for now
     
+    #core game logic
+    #always need to be checked
     #they take care of event handling
     #i.e. if arrow key is pressed, space bar is pressed
     for event in pygame.event.get():
@@ -102,6 +117,9 @@ while not gameExit:
                 player.downTrue()
             if event.key == pygame.K_r:
                 shoot = not shoot
+            #start tutorial
+            if event.key == pygame.K_z:
+                startText = False
         #shoot bullet via mouse
         if event.type == pygame.MOUSEBUTTONDOWN and shoot == True:
             player.shootBullet(0)
@@ -121,53 +139,66 @@ while not gameExit:
             if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 player.downFalse()
 
-    #check collisions, game logic stuff
-    #update graphcs to screen
 
     #make the color of the screen
     #will always be first
-    #gameDisplay.fill(Color.ANTIQUEWHITE)
     gameDisplay.blit(backGroundImage,[0,0,Layout.SCREEN_WIDTH,Layout.SCREEN_HEIGHT])
+   
+    #trapped in tutorial
+    #with non moving monsterList
+    #kill monster to play game
+    if startText: 
+        playerRules()        
     
-    #update monsters
-    for aMonster in monsterList:
-        aMonster.checkBulletHitList(player.bulletList)
-        if aMonster.update(monsterList,player,gameDisplay,healthPackList,ammoPackList,hiddenBombList,explosionAnimationList):
-            aMonster.drawUpdate(gameDisplay)
-    
-    #update heealth packs
-    for healthPack in healthPackList:
-        healthPack.drawUpdate(gameDisplay)
-    
-    #update ammo packs
-    for ammoPack in ammoPackList:
-        ammoPack.drawUpdate(gameDisplay)
-    
-    #update the player
-    player.update(healthPackList,ammoPackList,hiddenBombList,explosionAnimationList)
-    if player.drawUpdate(gameDisplay, framesPerSec):
-        print "_________________________________________GG WP_________________________________________"
-        print "Level: " + str(level)
-        print "Monsters killed : " + str(player.killCount)
-        print "\n\n\n\n\n\n\n\n"
-        break
-    
-    #play explosion animations
-    for anim in explosionAnimationList:
-        anim.drawUpdate(gameDisplay, framesPerSec)
-    
-    #display level
-    if player.ammo > 0:
-       text = font.render(" Level:"+str(level)+" Ammo:"+str(player.ammo)+" ",True,Color.ANTIQUEWHITE,Color.GREY)
-    else:   
-        text = font.render(" Level:"+str(level)+" No Ammo"+" ",True,Color.RED,Color.GREY)
-    gameDisplay.blit(text,[10,0,0,Layout.TOPOFFSET]) 
-    
-    #another way to draw rectangle
-    #gameDisplay.fill(RED, rect=[200,200,50,50])
-    #Using Mouse to Move
-    (mouseX, mouseY) = pygame.mouse.get_pos()
-    gameDisplay.blit(cursorImage,[mouseX-Layout.MOUSEDIMENSIONS/2,mouseY-Layout.MOUSEDIMENSIONS/2,Layout.MOUSEDIMENSIONS,Layout.MOUSEDIMENSIONS])
+    else:
+        #display current level
+        if player.ammo > 0:
+           text = font.render(" Level:"+str(level)+" Ammo:"+str(player.ammo)+" ",True,Color.ANTIQUEWHITE,Color.GREY)
+        else:   
+            text = font.render(" Level:"+str(level)+" No Ammo"+" ",True,Color.RED,Color.GREY)
+        gameDisplay.blit(text,[10,0,0,Layout.TOPOFFSET]) 
+        
+        if tutorial:
+            text = font.render(" Kill monster to start game! ",True,Color.RED,Color.GREY)
+            gameDisplay.blit(text,[10,50,0,Layout.TOPOFFSET]) 
+        #update graphics to screen
+
+        #update monsters
+        for aMonster in monsterList:
+            aMonster.checkBulletHitList(player.bulletList)
+            if aMonster.update(monsterList,player,gameDisplay,healthPackList,ammoPackList,hiddenBombList,explosionAnimationList, tutorial):
+                aMonster.drawUpdate(gameDisplay)
+            elif tutorial == True:
+                tutorial = False
+        
+        #update heealth packs
+        for healthPack in healthPackList:
+            healthPack.drawUpdate(gameDisplay)
+        
+        #update ammo packs
+        for ammoPack in ammoPackList:
+            ammoPack.drawUpdate(gameDisplay)
+        
+        #update the player
+        player.update(healthPackList,ammoPackList,hiddenBombList,explosionAnimationList)
+        if player.drawUpdate(gameDisplay, framesPerSec):
+            print "_________________________________________GG WP_________________________________________"
+            print "Level: " + str(level)
+            print "Monsters killed : " + str(player.killCount)
+            print "\n\n\n\n\n\n\n\n"
+            break
+        
+        #play explosion animations
+        for anim in explosionAnimationList:
+            anim.drawUpdate(gameDisplay, framesPerSec)
+        
+        
+        #Using Mouse to Move
+        (mouseX, mouseY) = pygame.mouse.get_pos()
+        gameDisplay.blit(cursorImage,[mouseX-Layout.MOUSEDIMENSIONS/2,mouseY-Layout.MOUSEDIMENSIONS/2,Layout.MOUSEDIMENSIONS,Layout.MOUSEDIMENSIONS])
+  
+
+
     pygame.display.update()
 
     #frames per sec, try to avoid changing this in code, keep it as a const

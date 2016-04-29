@@ -51,7 +51,7 @@ class AMonster:
         thread.start_new_thread(self.flash_Monster,(monsterList,))
     
     #update monster position
-    def update(self,monsterList,player,gameDisplay,healthPackList,ammoPackList,hiddenBombList,explosionAnimationList):
+    def update(self,monsterList,player,gameDisplay,healthPackList,ammoPackList,hiddenBombList,explosionAnimationList, tutorialLevel):
         if not self.state:
             return True
         if self.currentHealth <= 0:
@@ -64,7 +64,7 @@ class AMonster:
             elif spawnRate > 1-PickupConstants.RATESPAWN*(self.monsterLevel+1):
                 ammoPackList.append(AmmoPickUp(self.monsterX,self.monsterY))
             return False
-        if self.delay == self.delayTimer:
+        if self.delay == self.delayTimer and not tutorialLevel:
             #random movement
             pair = self.movements[self.locatePlayer(player)]
             #checks if movement chosen is not colliding with another monster
