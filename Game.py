@@ -45,7 +45,7 @@ hiddenBombList = []
 explosionAnimationList = []
 
 #display level
-font = pygame.font.SysFont("comicsansms", 16)
+font = pygame.font.Font("static/KOMTITP_.ttf", 16)
 
 #spawn monsters
 def spawnMonsters():
@@ -82,10 +82,12 @@ cursorImage = pygame.transform.scale(pygame.image.load(GameImages.CURSORIMAGE).c
 backGroundImage = pygame.transform.scale(pygame.image.load(GameImages.BACKGROUNDIMAGE).convert_alpha(),(Layout.SCREEN_WIDTH,Layout.SCREEN_HEIGHT))
 
 def playerRules():
-    gameDisplay.blit(font.render(" Use AWSD or ARROW Keys to move ",True, Color.ANTIQUEWHITE,Color.GREY),[100,100,100,Layout.TOPOFFSET]) 
-    gameDisplay.blit(font.render(" Shoot via Left Click or SPACE ",True, Color.ANTIQUEWHITE,Color.GREY),[100,150,100,Layout.TOPOFFSET]) 
-    gameDisplay.blit(font.render(" Toggle between shooting option via R ",True, Color.ANTIQUEWHITE,Color.GREY),[100,200,100,Layout.TOPOFFSET])
-    gameDisplay.blit(font.render(" Press Z to continue ",True, Color.ANTIQUEWHITE,Color.GREY),[100,250,100,Layout.TOPOFFSET])
+    pygame.draw.rect(gameDisplay, Color.GREY, [80, 80, 410, 180]) 
+    gameDisplay.blit(font.render(" Avoid the monsters! ",True, Color.ANTIQUEWHITE,Color.GREY),[100,100,100,Layout.TOPOFFSET]) 
+    gameDisplay.blit(font.render(" Use AWSD or ARROW Keys to move ",True, Color.ANTIQUEWHITE,Color.GREY),[100,130,100,Layout.TOPOFFSET]) 
+    gameDisplay.blit(font.render(" Shoot via Left Click or SPACE ",True, Color.ANTIQUEWHITE,Color.GREY),[100,160,100,Layout.TOPOFFSET]) 
+    gameDisplay.blit(font.render(" Toggle between shooting option via R ",True, Color.ANTIQUEWHITE,Color.GREY),[100,190,100,Layout.TOPOFFSET])
+    gameDisplay.blit(font.render(" Press Z to continue ",True, Color.ANTIQUEWHITE,Color.GREY),[100,220,100,Layout.TOPOFFSET])
           
         
 while not gameExit:
@@ -163,8 +165,15 @@ while not gameExit:
         gameDisplay.blit(text,[10,0,0,Layout.TOPOFFSET]) 
         
         if tutorial:
+            pygame.draw.rect(gameDisplay, Color.GREY, [80, 30, 400, 160]) 
             text = font.render(" Kill monster to start game! ",True,Color.RED,Color.GREY)
-            gameDisplay.blit(text,[10,50,0,Layout.TOPOFFSET]) 
+            text2 = font.render("Beware of the hidden bombs.", True, Color.RED, Color.GREY)
+            text3 = font.render("If you hear a beeping sound,", True, Color.RED, Color.GREY)
+            text4 = font.render("go back the other way!", True, Color.RED, Color.GREY)
+            gameDisplay.blit(text,[100,50,0,Layout.TOPOFFSET])
+            gameDisplay.blit(text2, [100, 80, 0, Layout.TOPOFFSET])
+            gameDisplay.blit(text3, [100, 110, 0, Layout.TOPOFFSET])
+            gameDisplay.blit(text4, [100, 140, 0, Layout.TOPOFFSET])
         #update graphics to screen
 
         #update monsters
