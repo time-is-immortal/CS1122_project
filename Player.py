@@ -185,12 +185,12 @@ class User:
         return self.image    
         
     def drawUpdate(self, gameDisplay, framesPerSec):
-        if self.currentHealth <= 0:
-            return True
         #player display
         gameDisplay.blit(self.reloadImage(),[self.playerX - PlayerConstants.PLAYERWIDTH/2,self.playerY - PlayerConstants.PLAYERHEIGHT/2,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT])
         #health bar
         pygame.draw.rect(gameDisplay,Color.RED,[(Layout.SCREEN_WIDTH-Layout.HEALTHBARWIDTH)+Layout.HEALTHBARWIDTH*(1-self.currentHealth/float(PlayerConstants.MAXHEALTH)),0,Layout.SCREEN_WIDTH,Layout.TOPOFFSET-1])
+        if self.currentHealth <= 0:
+            return True
         for index, bullet in enumerate(self.bulletList): #update every bullet on screen
             if bullet.isOffScreen:
                 del self.bulletList[index]

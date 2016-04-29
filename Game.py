@@ -5,7 +5,9 @@ from Monster import AMonster
 from Player import User
 from Pickups import *
 from Bomb import HiddenBomb
-
+import time
+import sys
+ 
 #will initialize all modules
 #have to have it
 pygame.init()
@@ -80,8 +82,10 @@ cursorImage = pygame.transform.scale(pygame.image.load(GameImages.CURSORIMAGE).c
 backGroundImage = pygame.transform.scale(pygame.image.load(GameImages.BACKGROUNDIMAGE).convert_alpha(),(Layout.SCREEN_WIDTH,Layout.SCREEN_HEIGHT))
 
 def playerRules():
-    text = font.render(" Use AWSD or ARROW Keys to move. \n You can shoot with the spacebar or the mouse. Toggle between the two by pressing R.",1, Color.WHITE)
-    gameDisplay.blit(text,[100,100,100,Layout.TOPOFFSET]) 
+    gameDisplay.blit(font.render(" Use AWSD or ARROW Keys to move ",True, Color.ANTIQUEWHITE,Color.GREY),[100,100,100,Layout.TOPOFFSET]) 
+    gameDisplay.blit(font.render(" Shoot via Left Click or SPACE ",True, Color.ANTIQUEWHITE,Color.GREY),[100,150,100,Layout.TOPOFFSET]) 
+    gameDisplay.blit(font.render(" Toggle between shooting option via R ",True, Color.ANTIQUEWHITE,Color.GREY),[100,200,100,Layout.TOPOFFSET])
+    gameDisplay.blit(font.render(" Press Z to continue ",True, Color.ANTIQUEWHITE,Color.GREY),[100,250,100,Layout.TOPOFFSET])
           
         
 while not gameExit:
@@ -184,12 +188,27 @@ while not gameExit:
         #update the player
         player.update(healthPackList,ammoPackList,hiddenBombList,explosionAnimationList)
         if player.drawUpdate(gameDisplay, framesPerSec):
-            print "_________________________________________GG WP_________________________________________"
-            print "Level: " + str(level)
-            print "Monsters killed : " + str(player.killCount)
-            print "\n\n\n\n\n\n\n\n"
-            break
-        
+            gameDisplay.blit(font.render(" _________GG WP_________ ",True, Color.ANTIQUEWHITE,Color.GREY),[100,100,100,Layout.TOPOFFSET]) 
+            gameDisplay.blit(font.render(" Level: " + str(level),True, Color.ANTIQUEWHITE,Color.GREY),[100,150,100,Layout.TOPOFFSET]) 
+            gameDisplay.blit(font.render(" Monsters killed : " + str(player.killCount),True, Color.ANTIQUEWHITE,Color.GREY),[100,200,100,Layout.TOPOFFSET])
+            gameDisplay.blit(font.render(" Press SPACE to continue ",True, Color.ANTIQUEWHITE,Color.GREY),[100,250,100,Layout.TOPOFFSET])
+            gameDisplay.blit(font.render(" Press ENTER to quit ",True, Color.ANTIQUEWHITE,Color.GREY),[100,300,100,Layout.TOPOFFSET])
+            pygame.display.update()  
+            while(not tutorial):              
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                        tutorial = True
+                        startText = True
+                        level = 0
+                        player = User()
+                        del monsterList[:]
+                        del healthPackList[:]
+                        del ammoPackList[:]
+                        del hiddenBombList[:]
+                        del explosionAnimationList[:]
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                        pygame.quit()
+                        sys.exit("Thanks for playing")      
         #play explosion animations
         for anim in explosionAnimationList:
             anim.drawUpdate(gameDisplay, framesPerSec)

@@ -93,6 +93,7 @@ class AMonster:
         #checks if collides with player
         if CHECKRECT(self.monsterX,self.monsterY,self.monsterWidth,self.monsterHeight,player.playerX,player.playerY,PlayerConstants.PLAYERWIDTH,PlayerConstants.PLAYERHEIGHT): 
             # The monster is dead.
+            self.drawUpdate(gameDisplay)
             player.loseHealth(self.currentHealth)
             player.killCount+=1
             try:
