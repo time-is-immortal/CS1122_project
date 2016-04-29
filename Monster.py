@@ -57,12 +57,13 @@ class AMonster:
         if self.currentHealth <= 0:
             # The monster is dead.
             monsterList.remove(self)
-            player.killCount+=1
-            spawnRate = random.random()
-            if spawnRate < PickupConstants.RATESPAWN*(self.monsterLevel+1):
-                healthPackList.append(HealthPickUp(self.monsterX,self.monsterY))
-            elif spawnRate > 1-PickupConstants.RATESPAWN*(self.monsterLevel+1):
-                ammoPackList.append(AmmoPickUp(self.monsterX,self.monsterY))
+            if not tutorialLevel:
+                player.killCount+=1
+                spawnRate = random.random()
+                if spawnRate < PickupConstants.RATESPAWN*(self.monsterLevel+1):
+                    healthPackList.append(HealthPickUp(self.monsterX,self.monsterY))
+                elif spawnRate > 1-PickupConstants.RATESPAWN*(self.monsterLevel+1):
+                    ammoPackList.append(AmmoPickUp(self.monsterX,self.monsterY))
             return False
         if self.delay == self.delayTimer and not tutorialLevel:
             #random movement

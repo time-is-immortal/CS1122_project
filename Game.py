@@ -89,12 +89,12 @@ while not gameExit:
     #make monster(s)
     #no monsters left
     if len(monsterList) == 0:
-        level+=1
-        spawnMonsters()
         if not tutorial:
+            level+=1
             if level >= BombConstants.MINLEVEL:
                 createHiddenBombs(1) # Just one bomb for now
-    
+        spawnMonsters()
+        
     #core game logic
     #always need to be checked
     #they take care of event handling
@@ -170,6 +170,8 @@ while not gameExit:
                 aMonster.drawUpdate(gameDisplay)
             elif tutorial == True:
                 tutorial = False
+                player.currentHealth = PlayerConstants.MAXHEALTH
+                player.ammo = PlayerConstants.AMMOLIMIT
         
         #update heealth packs
         for healthPack in healthPackList:
