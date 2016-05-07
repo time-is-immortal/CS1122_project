@@ -165,15 +165,19 @@ while not gameExit:
         gameDisplay.blit(text,[10,0,0,Layout.TOPOFFSET]) 
         
         if tutorial:
-            pygame.draw.rect(gameDisplay, Color.GREY, [80, 30, 400, 160]) 
+            pygame.draw.rect(gameDisplay, Color.GREY, [80, 30, 420, 220]) 
             text = font.render(" Kill monster to start game! ",True,Color.RED,Color.GREY)
             text2 = font.render("Beware of the hidden bombs.", True, Color.RED, Color.GREY)
             text3 = font.render("If you hear a beeping sound,", True, Color.RED, Color.GREY)
             text4 = font.render("go back the other way!", True, Color.RED, Color.GREY)
+            text5 = font.render ("Tip: Monsters sometimes drop", True, Color.ANTIQUEWHITE, Color.Grey)
+            text6 = font.render("ammo and health packs!", True, Color.ANTIQUEWHITE, Color.Grey)
             gameDisplay.blit(text,[100,50,0,Layout.TOPOFFSET])
             gameDisplay.blit(text2, [100, 80, 0, Layout.TOPOFFSET])
             gameDisplay.blit(text3, [100, 110, 0, Layout.TOPOFFSET])
             gameDisplay.blit(text4, [100, 140, 0, Layout.TOPOFFSET])
+            gameDisplay.blit(text5, [100, 170, 0, Layout.TOPOFFSET])
+            gameDisplay.blit(text6, [100, 200, 0, Layout.TOPOFFSET])
         #update graphics to screen
 
         #update monsters
