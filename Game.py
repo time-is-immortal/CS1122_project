@@ -168,7 +168,7 @@ while not gameExit:
             pygame.draw.rect(gameDisplay, Color.GREY, [80, 30, 420, 220]) 
             text = font.render(" Kill monster to start game! ",True,Color.RED,Color.GREY)
             text2 = font.render("Beware of the hidden bombs.", True, Color.RED, Color.GREY)
-            text3 = font.render("If you hear a beeping sound,", True, Color.RED, Color.GREY)
+            text3 = font.render("If you hear a ringing sound,", True, Color.RED, Color.GREY)
             text4 = font.render("go back the other way!", True, Color.RED, Color.GREY)
             text5 = font.render ("Tip: Monsters sometimes drop", True, Color.ANTIQUEWHITE, Color.GREY)
             text6 = font.render("ammo and health packs!", True, Color.ANTIQUEWHITE, Color.GREY)
@@ -201,6 +201,7 @@ while not gameExit:
         #update the player
         player.update(healthPackList,ammoPackList,hiddenBombList,explosionAnimationList)
         if player.drawUpdate(gameDisplay, framesPerSec):
+            pygame.draw.rect(gameDisplay, Color.GREY, [80, 80, 310, 280])
             gameDisplay.blit(font.render(" _________GG WP_________ ",True, Color.ANTIQUEWHITE,Color.GREY),[100,100,100,Layout.TOPOFFSET]) 
             gameDisplay.blit(font.render(" Level: " + str(level),True, Color.ANTIQUEWHITE,Color.GREY),[100,150,100,Layout.TOPOFFSET]) 
             gameDisplay.blit(font.render(" Monsters killed : " + str(player.killCount),True, Color.ANTIQUEWHITE,Color.GREY),[100,200,100,Layout.TOPOFFSET])
